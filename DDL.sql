@@ -32,13 +32,11 @@ CREATE TABLE "film" (
 
 CREATE TABLE "seat" (
   "seat_id" serial4,
-  "studio_id" int4 not null,
   "seat_col" char(1) not null,
   "seat_row" smallint not null,
   "created_at" timestamp not null,
   "updated_at" timestamp not null,
-  PRIMARY KEY (seat_id),
-  FOREIGN KEY (studio_id) REFERENCES "studio"(studio_id)
+  PRIMARY KEY (seat_id)
 );
 
 CREATE TABLE "schedule" (
