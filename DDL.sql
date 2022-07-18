@@ -54,16 +54,28 @@ CREATE TABLE "schedule" (
   FOREIGN KEY (film_code) REFERENCES "film"(film_code)
 );
 
+CREATE TABLE "seat_detail" (
+  "seat_detail_id" serial4,
+  "seat_id" int4 not null,
+  "studio_id" int4 not null,
+  "schedule_id" int4 not null,
+  "is_available" boolean not null,
+  "created_at" timestamp not null,
+  "updated_at" timestamp not null,
+  PRIMARY KEY (seat_detail_id),
+  FOREIGN KEY (seat_id) REFERENCES "seat"(seat_id),
+  FOREIGN KEY (schedule_id) REFERENCES "schedule"(schedule_id)
+);
+
 CREATE TABLE "reservation" (
   "reservation_id" serial4,
-  "seat_id" int4 not null,
+  "seat_detail_id" int4 not null,
   "schedule_id" int4 not null,
   "user_id" int4 not null,
   "is_active" boolean not null,
   "created_at" timestamp not null,
   "updated_at" timestamp not null,
   PRIMARY KEY (reservation_id),
-  FOREIGN KEY (seat_id) REFERENCES "seat"(seat_id),
-  FOREIGN KEY (user_id) REFERENCES "user"(user_id),
-  FOREIGN KEY (schedule_id) REFERENCES "schedule"(schedule_id)
+  FOREIGN KEY (seat_detail_id) REFERENCES "seat_detail"(seat_detail_id),
+  FOREIGN KEY (user_id) REFERENCES "user"(user_id)
 );
