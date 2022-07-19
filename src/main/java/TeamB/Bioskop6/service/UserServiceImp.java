@@ -3,11 +3,16 @@ package TeamB.Bioskop6.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.stereotype.Service;
+
 import TeamB.Bioskop6.entity.User;
 import TeamB.Bioskop6.helper.ResourceAlreadyExistException;
 import TeamB.Bioskop6.helper.ResourceNotFoundException;
 import TeamB.Bioskop6.repository.UserRepository;
+import lombok.AllArgsConstructor;
 
+@Service
+@AllArgsConstructor
 public class UserServiceImp implements UserService {
     
     private UserRepository userRepository;
@@ -22,7 +27,7 @@ public class UserServiceImp implements UserService {
     public User getUserById(Integer id) throws ResourceNotFoundException {
         Optional<User> optionalUser = userRepository.findById(id);
         if (optionalUser.isEmpty()) {
-            throw new ResourceNotFoundException("User with ID" + id + "is not available!");
+            throw new ResourceNotFoundException("User with ID " + id + " is not available!");
         }
         return optionalUser.get();
     }
@@ -31,7 +36,7 @@ public class UserServiceImp implements UserService {
     public User createUser(User user) throws ResourceAlreadyExistException {
         Optional<User> optionalUser = userRepository.findById(user.getUserId());
         if (optionalUser.isPresent()) {
-            throw new ResourceAlreadyExistException("User with ID" + user.getUserId() + "is already exist!");
+            throw new ResourceAlreadyExistException("User with ID " + user.getUserId() + " is already exist!");
         }
         User newUser = userRepository.save(user);
         return newUser;
@@ -41,7 +46,7 @@ public class UserServiceImp implements UserService {
     public User updateUser(User user) throws ResourceNotFoundException {
         Optional<User> optionalUser = userRepository.findById(user.getUserId());
         if (optionalUser.isEmpty()) {
-            throw new ResourceNotFoundException("User with ID" + user.getUserId() + "is not available!");
+            throw new ResourceNotFoundException("User with ID " + user.getUserId() + " is not available!");
         }
         User updatedUser = userRepository.save(user);
         return updatedUser;
@@ -51,8 +56,8 @@ public class UserServiceImp implements UserService {
     public void deleteUser(Integer id) throws ResourceNotFoundException {
         Optional<User> optionalUser = userRepository.findById(id);
         if (optionalUser.isEmpty()) {
-            throw new ResourceNotFoundException("User with ID" + id + "is not available!");
+            throw new ResourceNotFoundException("User with ID " + id + " is not available!");
         }
+        userRepository.delete(optionalUser.get());
     }
-    
 }
