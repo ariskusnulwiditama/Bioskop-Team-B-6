@@ -7,7 +7,8 @@ CREATE TABLE "user" (
   "password" varchar(50) not null,
   "created_at" timestamp not null,
   "updated_at" timestamp not null,
-  CONSTRAINT user_pkey PRIMARY KEY (user_id)
+  CONSTRAINT user_pkey PRIMARY KEY (user_id),
+  CONSTRAINT user_ukey UNIQUE (username, email_address)
 );
 
 CREATE TABLE "studio" (
@@ -27,7 +28,7 @@ CREATE TABLE "film" (
   "is_playing" boolean not null,
   "created_at" timestamp not null,
   "updated_at" timestamp not null,
-  PRIMARY KEY (film_code)
+  CONSTRAINT film_pkey PRIMARY KEY (film_code)
 );
 
 CREATE TABLE "seat" (
@@ -36,7 +37,7 @@ CREATE TABLE "seat" (
   "seat_row" smallint not null,
   "created_at" timestamp not null,
   "updated_at" timestamp not null,
-  PRIMARY KEY (seat_id)
+  CONSTRAINT seat_pkey PRIMARY KEY (seat_id)
 );
 
 CREATE TABLE "schedule" (
@@ -48,8 +49,8 @@ CREATE TABLE "schedule" (
   "price" float8 not null,
   "created_at" timestamp not null,
   "updated_at" timestamp not null,
-  PRIMARY KEY (schedule_id),
-  FOREIGN KEY (film_code) REFERENCES "film"(film_code)
+  CONSTRAINT schedule_pkey PRIMARY KEY (schedule_id),
+  CONSTRAINT film_fkey FOREIGN KEY (film_code) REFERENCES "film"(film_code)
 );
 
 CREATE TABLE "seat_detail" (
@@ -60,9 +61,9 @@ CREATE TABLE "seat_detail" (
   "is_available" boolean not null,
   "created_at" timestamp not null,
   "updated_at" timestamp not null,
-  PRIMARY KEY (seat_detail_id),
-  FOREIGN KEY (seat_id) REFERENCES "seat"(seat_id),
-  FOREIGN KEY (schedule_id) REFERENCES "schedule"(schedule_id)
+  CONSTRAINT seat_detail_pkey PRIMARY KEY (seat_detail_id),
+  CONSTRAINT seat_fkey FOREIGN KEY (seat_id) REFERENCES "seat"(seat_id),
+  CONSTRAINT schedule_fkey FOREIGN KEY (schedule_id) REFERENCES "schedule"(schedule_id)
 );
 
 CREATE TABLE "reservation" (
@@ -73,7 +74,7 @@ CREATE TABLE "reservation" (
   "is_active" boolean not null,
   "created_at" timestamp not null,
   "updated_at" timestamp not null,
-  PRIMARY KEY (reservation_id),
-  FOREIGN KEY (seat_detail_id) REFERENCES "seat_detail"(seat_detail_id),
-  FOREIGN KEY (user_id) REFERENCES "user"(user_id)
+  CONSTRAINT reservation_pkey PRIMARY KEY (reservation_id),
+  CONSTRAINT seat_detail_fkey FOREIGN KEY (seat_detail_id) REFERENCES "seat_detail"(seat_detail_id),
+  CONSTRAINT user_fkey FOREIGN KEY (user_id) REFERENCES "user"(user_id)
 );
