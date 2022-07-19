@@ -69,7 +69,6 @@ CREATE TABLE "seat_detail" (
 CREATE TABLE "reservation" (
   "reservation_id" serial4,
   "seat_detail_id" int4 not null,
-  "schedule_id" int4 not null,
   "user_id" int4 not null,
   "is_active" boolean not null,
   "created_at" timestamp not null,
