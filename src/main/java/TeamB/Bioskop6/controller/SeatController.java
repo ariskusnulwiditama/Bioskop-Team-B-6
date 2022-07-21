@@ -1,7 +1,8 @@
-package TeamB.Bioskop6.controllers;
+package TeamB.Bioskop6.controller;
 
-import TeamB.Bioskop6.Handler.ResponseHandler;
-import TeamB.Bioskop6.Helpers.DataNotFoundException;
+import TeamB.Bioskop6.handler.ResponseHandler;
+import TeamB.Bioskop6.helper.DataNotFoundException;
+import TeamB.Bioskop6.helper.ResourceNotFoundException;
 import TeamB.Bioskop6.dto.SeatRequestDTO;
 import TeamB.Bioskop6.dto.SeatResponseDTO;
 import TeamB.Bioskop6.entity.Seat;
@@ -11,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import TeamB.Bioskop6.Helpers.*;
 import org.springframework.http.HttpHeaders;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -65,7 +65,7 @@ public class SeatController {
             Seat seat = this.seatService.getOneSeat(id);
             SeatResponseDTO seatResponseDTO = seat.convertToResponse();
             return ResponseHandler.generateResponse(null, HttpStatus.OK, new HttpHeaders(), ZonedDateTime.now(), seatResponseDTO);
-        }catch (DataNotFoundException e) {
+        }catch (Exception e) {
             return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.NOT_FOUND, new HttpHeaders(), ZonedDateTime.now(), null);
         }
     }
@@ -78,7 +78,7 @@ public class SeatController {
             Seat newSeat = seatRequestDTO.convertToEntity();
             Seat updatedSeat = this.seatService.updateSeatById(newSeat);
             return ResponseHandler.generateResponse("update seat", HttpStatus.OK, new HttpHeaders(), ZonedDateTime.now(), updatedSeat.convertToResponse());
-        }catch (Exception | DataNotFoundException e) {
+        }catch (Exception e) {
             return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.MULTI_STATUS, new HttpHeaders(), ZonedDateTime.now(), null);
         }
 
@@ -91,7 +91,7 @@ public class SeatController {
         try {
             try {
                 this.seatService.deleteSeatById(id);
-            } catch (DataNotFoundException e) {
+            } catch (Exception e) {
                 throw new RuntimeException(e);
             }
             return ResponseHandler.generateResponse("delete seat " + id, HttpStatus.OK, new HttpHeaders(), ZonedDateTime.now(), null);
