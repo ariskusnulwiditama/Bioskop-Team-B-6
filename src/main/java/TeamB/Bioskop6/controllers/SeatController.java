@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import TeamB.Bioskop6.Helpers.*;
 import org.springframework.http.HttpHeaders;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -20,64 +20,84 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/api/v1")
+@RequestMapping("/api")
 public class SeatController {
     @Autowired
     private final SeatService seatService;
 
     @GetMapping("/seats")
-    public ResponseEntity<?> getAllSeats() {
+//    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<Object> getAllSeats() {
         HttpHeaders headers = new HttpHeaders();
         headers.set("APP-NAME", "Bioskop API B");
-        //List<Seat> seats = this.seatService.getAllSeat();
         try {
+            List<Seat> seats = this.seatService.getAllSeat();
             List<SeatResponseDTO> seatResponseDTO = new ArrayList<>();
-            ResponseEntity<?> body = ResponseHandler.generateResponse("get all seats", HttpStatus.OK, new HttpHeaders(), ZonedDateTime.now(ZoneId.of("Asia/Tokyo")), seatResponseDTO);
-            return ResponseEntity.status(body.getStatusCode()).headers(body.getHeaders()).body(body.getBody());
+            for(Seat seat : seats){
+                seatResponseDTO.add(seat.convertToResponse());
+            }
+            return ResponseHandler.generateResponse(null, HttpStatus.OK, headers, ZonedDateTime.now(), seatResponseDTO);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).headers(new HttpHeaders()).body(e.getMessage());
+            return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.MULTI_STATUS, headers, ZonedDateTime.now(), null);
         }
     }
 
     @PostMapping("/seats")
-    public ResponseEntity<?> createSeat(@RequestBody SeatRequestDTO seatRequestDTO) throws ResourceNotFoundException {
+    public ResponseEntity<Object> createSeat(@RequestBody SeatRequestDTO seatRequestDTO) throws ResourceNotFoundException {
         HttpHeaders headers = new HttpHeaders();
         headers.set("APP-NAME", "Bioskop API B");
-        Seat newSeat = seatRequestDTO.convertToEntity();
-        Seat seat = this.seatService.createSeat(newSeat);
-        SeatResponseDTO seatResponseDTO = seat.convertToResponse();
-        ResponseEntity<?> body = ResponseHandler.generateResponse("create seat", HttpStatus.OK, new HttpHeaders(), ZonedDateTime.now(ZoneId.of("Asia/Tokyo")), seatResponseDTO);
-        return ResponseEntity.status(body.getStatusCode()).headers(body.getHeaders()).body(body.getBody());
+
+        try {
+            Seat seat = seatRequestDTO.convertToEntity();
+            Seat newSeat = this.seatService.createSeat(seat);
+            return ResponseHandler.generateResponse(null, HttpStatus.CREATED, headers, ZonedDateTime.now(), newSeat);
+        }catch (Exception e) {
+            return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.MULTI_STATUS, new HttpHeaders(), ZonedDateTime.now(), null);
+        }
+
     }
 
     @GetMapping("/seat/{id}")
-    public ResponseEntity<?> getOneSeat(@PathVariable Integer id, @RequestBody SeatRequestDTO seatRequestDTO) throws DataNotFoundException {
+    public ResponseEntity<Object> getOneSeat(@PathVariable Integer id) throws ResourceNotFoundException {
         HttpHeaders headers = new HttpHeaders();
         headers.set("APP-NAME", "Bioskop API B");
-        Seat seat = this.seatService.getOneSeat(id);
-        return ResponseHandler.generateResponse("Success get one seat", HttpStatus.OK, new HttpHeaders(), ZonedDateTime.now(ZoneId.of("Asia/Tokyo")), seat);
+        try {
+            Seat seat = this.seatService.getOneSeat(id);
+            SeatResponseDTO seatResponseDTO = seat.convertToResponse();
+            return ResponseHandler.generateResponse(null, HttpStatus.OK, new HttpHeaders(), ZonedDateTime.now(), seatResponseDTO);
+        }catch (DataNotFoundException e) {
+            return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.NOT_FOUND, new HttpHeaders(), ZonedDateTime.now(), null);
+        }
     }
 
     @PostMapping("/seat/{id}")
-    public ResponseEntity<?> updateSeatById(@PathVariable Integer id, @RequestBody SeatRequestDTO seatRequestDTO) throws DataNotFoundException {
+    public ResponseEntity<Object> updateSeatById(@PathVariable Integer id, @RequestBody SeatRequestDTO seatRequestDTO) throws ResourceNotFoundException {
         HttpHeaders headers = new HttpHeaders();
         headers.set("APP-NAME", "Bioskop API B");
-        Seat newSeat = seatRequestDTO.convertToEntity();
-        newSeat.setSeatId(id);
-        Seat updatedSeat = this.seatService.updateSeatById(newSeat);
-        SeatResponseDTO seatResponseDTO = updatedSeat.convertToResponse();
-        ResponseEntity<?> body = ResponseHandler.generateResponse("Success update seat", HttpStatus.OK, new HttpHeaders(), ZonedDateTime.now(ZoneId.of("Asia/Tokyo")), seatResponseDTO);
-        return ResponseEntity.status(body.getStatusCode()).headers(body.getHeaders()).body(body.getBody());
+        try {
+            Seat newSeat = seatRequestDTO.convertToEntity();
+            Seat updatedSeat = this.seatService.updateSeatById(newSeat);
+            return ResponseHandler.generateResponse("update seat", HttpStatus.OK, new HttpHeaders(), ZonedDateTime.now(), updatedSeat.convertToResponse());
+        }catch (Exception | DataNotFoundException e) {
+            return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.MULTI_STATUS, new HttpHeaders(), ZonedDateTime.now(), null);
+        }
+
     }
 
     @DeleteMapping("/seat/{id}")
-    public ResponseEntity<?> deleteSeatById(@PathVariable Integer id) throws DataNotFoundException {
+    public ResponseEntity<Object> deleteSeatById(@PathVariable Integer id) throws ResourceNotFoundException {
         HttpHeaders headers = new HttpHeaders();
         headers.set("APP-NAME", "Bioskop API B");
-        Seat seat = new Seat();
-        seat.setSeatId(id);
-        this.seatService.deleteSeatById(seat);
-        ResponseEntity<?> body = ResponseHandler.generateResponse("Success delete seat", HttpStatus.OK, new HttpHeaders(), ZonedDateTime.now(ZoneId.of("Asia/Tokyo")), null);
-        return ResponseEntity.status(body.getStatusCode()).headers(body.getHeaders()).body(body.getBody());
+        try {
+            try {
+                this.seatService.deleteSeatById(id);
+            } catch (DataNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+            return ResponseHandler.generateResponse("delete seat " + id, HttpStatus.OK, new HttpHeaders(), ZonedDateTime.now(), null);
+        }catch (Exception e) {
+            return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.MULTI_STATUS, new HttpHeaders(), ZonedDateTime.now(), null);
+        }
+
     }
 }

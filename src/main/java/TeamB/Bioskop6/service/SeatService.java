@@ -4,7 +4,6 @@ import TeamB.Bioskop6.Helpers.DataNotFoundException;
 import TeamB.Bioskop6.entity.Seat;
 import TeamB.Bioskop6.repository.SeatRepository;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -37,11 +36,8 @@ public class SeatService {
         return this.seatRepository.save(seat);
     }
 
-    public void deleteSeatById(Seat seat) throws DataNotFoundException {
-        Optional<Seat> deletedSeat = this.seatRepository.findById(seat.getSeatId());
-        if(deletedSeat.isEmpty()){
-            throw new DataNotFoundException("Seat is Not Available");
-        }
-        this.seatRepository.delete(deletedSeat.get());
+    public void deleteSeatById(Integer id) throws DataNotFoundException {
+        this.getOneSeat(id);
+        this.seatRepository.deleteById(id);
     }
 }
