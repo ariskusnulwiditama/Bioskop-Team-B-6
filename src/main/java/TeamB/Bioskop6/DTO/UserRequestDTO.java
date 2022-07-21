@@ -1,4 +1,4 @@
-package TeamB.Bioskop6.DTO;
+package TeamB.Bioskop6.dto;
 
 import TeamB.Bioskop6.entity.User;
 import lombok.AllArgsConstructor;
