@@ -1,4 +1,4 @@
-package TeamB.Bioskop6.Handler;
+package TeamB.Bioskop6.handler;
 import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.Map;

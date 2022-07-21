@@ -1,4 +1,4 @@
-package TeamB.Bioskop6.Helpers;
+package TeamB.Bioskop6.helper;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

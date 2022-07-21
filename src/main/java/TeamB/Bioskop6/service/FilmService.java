@@ -1,7 +1,7 @@
 package TeamB.Bioskop6.service;
 
-import TeamB.Bioskop6.Helpers.DataNotFoundException;
 import TeamB.Bioskop6.entity.Film;
+import TeamB.Bioskop6.helper.DataNotFoundException;
 import TeamB.Bioskop6.repository.FilmRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
