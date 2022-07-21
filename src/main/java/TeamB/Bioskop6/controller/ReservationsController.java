@@ -1,92 +1,72 @@
 package TeamB.Bioskop6.controller;
 
-import TeamB.Bioskop6.handler.ResponseHandler;
 import TeamB.Bioskop6.helper.ResourceAlreadyExistException;
 import TeamB.Bioskop6.helper.ResourceNotFoundException;
 import TeamB.Bioskop6.dto.ReservationRequestDTO;
-import TeamB.Bioskop6.dto.ReservationResponseDTO;
-import TeamB.Bioskop6.entity.Reservations;
 import TeamB.Bioskop6.service.ReservationsServiceImpl;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @RestController
 @AllArgsConstructor
 public class ReservationsController {
+    @Autowired
+    ReservationsServiceImpl reservationService;
 
-    private final ReservationsServiceImpl reservationsService;
-
-    @GetMapping("/Reservations")
-    public ResponseEntity<Object> getAllReservations() {
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("APP-NAME", "Bioskop6 API KELOMPOK B");
-        try {
-            List<Reservations> reservationsList = this.reservationsService.getAllReservations();
-            List<ReservationResponseDTO> reservationResponseDTOS = new ArrayList<>();
-            for (Reservations reservations : reservationsList){
-                reservationResponseDTOS.add(reservations.convertToResponse());
-            }
-            return ResponseHandler.generateResponse(null, HttpStatus.OK, headers, ZonedDateTime.now(), reservationResponseDTOS);
-        } catch (Exception e) {
-            return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.MULTI_STATUS, headers, ZonedDateTime.now(), null);
-        }
+    /***
+     * Get All data from reservation table into list
+     * @return
+     */
+    @GetMapping("/reservations")
+    public ResponseEntity<?> getAllReservations() {
+        return reservationService.getAllReservation();
     }
 
-    @GetMapping("/Reservations/{id}")
-    public ResponseEntity<Object> getReservationsById(@PathVariable Integer id) throws ResourceNotFoundException {
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("APP-NAME", "Bioskop6 API KELOMPOK B");
-        try {
-            Reservations reservations = reservationsService.getReservationsById(id);
-            ReservationResponseDTO reservationResponseDTO = reservations.convertToResponse();
-            return ResponseHandler.generateResponse(null, HttpStatus.OK, headers, ZonedDateTime.now(), reservationResponseDTO);
-        } catch (ResourceNotFoundException e) {
-            return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.NOT_FOUND, headers, ZonedDateTime.now(), null);
-        }
+    /***
+     * Get a data from reservation table by its ID
+     * @param id
+     * @return
+     * @throws ResourceNotFoundException
+     */
+    @GetMapping("/reservation/{id}")
+    public ResponseEntity<?> getReservationsById(@PathVariable Integer id) throws ResourceNotFoundException {
+        return reservationService.getReservationById(id);
     }
 
-    @PostMapping("/Reservations/create")
-    public ResponseEntity<Object> createReservations(ReservationRequestDTO reservationRequestDTO) throws ResourceAlreadyExistException {
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("APP-NAME", "Bioskop6 API KELOMPOK B");
-        try {
-            Reservations reservations = reservationRequestDTO.convertToEntity();
-            Reservations newReservations = this.reservationsService.createReservations(reservations);
-            return ResponseHandler.generateResponse("User with ID " + newReservations.getReservationId() + " successfully created!", HttpStatus.CREATED, headers, ZonedDateTime.now(), newReservations);
-        } catch (ResourceAlreadyExistException e) {
-            return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.NOT_ACCEPTABLE, headers, ZonedDateTime.now(), null);
-        }
+    /***
+     * Create a new data in reservation table
+     * @param reservationRequestDTO
+     * @return
+     * @throws ResourceAlreadyExistException
+     */
+    @PostMapping("/reservation/create")
+    public ResponseEntity<?> createReservations(ReservationRequestDTO reservationRequestDTO) throws ResourceAlreadyExistException {
+        return reservationService.createReservation(reservationRequestDTO);
     }
 
-    @PutMapping("/Reservations/update")
-    public ResponseEntity<Object> updateReservations(ReservationRequestDTO reservationRequestDTO) throws ResourceNotFoundException {
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("APP-NAME", "Bioskop6 API KELOMPOK B");
-        try {
-            Reservations reservations = reservationRequestDTO.convertToEntity();
-            Reservations updatedReservations = reservationsService.updateReservations(reservations);
-            return ResponseHandler.generateResponse("User with ID " + updatedReservations.getReservationId() + " successfully updated!", HttpStatus.OK, headers, ZonedDateTime.now(), updatedReservations);
-        } catch (Exception e) {
-            return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.NOT_FOUND, headers, ZonedDateTime.now(), null);
-        }
+    /***
+     * Update existing data in reservation table   
+     * @param reservationRequestDTO
+     * @return
+     * @throws ResourceNotFoundException
+     */
+    @PutMapping("/reservation/update")
+    public ResponseEntity<?> updateReservations(ReservationRequestDTO reservationRequestDTO) throws ResourceNotFoundException {
+        return reservationService.updateReservation(reservationRequestDTO);
     }
 
-    @DeleteMapping("/Reservations/delete/{id}")
-    public ResponseEntity<Object> deleteReservations(@PathVariable Integer id) throws ResourceNotFoundException {
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("APP-NAME", "Bioskop6 API KELOMPOK B");
-        try {
-            reservationsService.deleteReservations(id);
-            return ResponseHandler.generateResponse("User with ID " + id + " successfully deleted!", HttpStatus.OK, headers, ZonedDateTime.now(), null);
-        } catch (Exception e) {
-            return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.NOT_FOUND, headers, ZonedDateTime.now(), null);
-        }
+    /***
+     * Delete existing data in reservation table by its ID
+     * @param id
+     * @return
+     * @throws ResourceNotFoundException
+     */
+    @DeleteMapping("/reservation/delete/{id}")
+    public ResponseEntity<?> deleteReservations(@PathVariable Integer id) throws ResourceNotFoundException {
+        return reservationService.deleteReservation(id);
     }
 }

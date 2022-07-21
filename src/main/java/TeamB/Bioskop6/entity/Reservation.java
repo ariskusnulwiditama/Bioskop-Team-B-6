@@ -14,15 +14,10 @@ import java.time.LocalDateTime;
 @Setter
 @Entity
 @Builder
-public class Reservations {
-
+public class Reservation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer reservationId;
-
-//    @ManyToOne
-//    @JoinColumn(name = "schedule_id")
-//    private Schedule schedule;
 
     private Boolean isActive;
 
@@ -36,7 +31,6 @@ public class Reservations {
     public ReservationResponseDTO convertToResponse(){
         return ReservationResponseDTO.builder()
                 .reservationId(this.reservationId)
-//                .scheduleId(this.schedule.getSchaduleId())
                 .isActive(this.isActive)
                 .createdAt(this.createdAt)
                 .updatedAt(this.updatedAt)
@@ -47,7 +41,6 @@ public class Reservations {
     public String toString() {
         return "Reservations{" +
                 "reservationId=" + reservationId +
-//                ", schedule=" + schedule +
                 ", isActive=" + isActive +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +

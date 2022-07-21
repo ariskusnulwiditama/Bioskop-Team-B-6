@@ -1,21 +1,21 @@
 package TeamB.Bioskop6.dto;
 
-import TeamB.Bioskop6.entity.Reservations;
+import TeamB.Bioskop6.entity.Reservation;
 
 import java.time.LocalDateTime;
 
 public class ReservationRequestDTO {
 
     private Integer reservationId;
-//    private Schedule schedule;
+    
     private Boolean isActive;
 
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
 
-    public Reservations convertToEntity(){
-        return Reservations.builder()
+    public Reservation convertToEntity(){
+        return Reservation.builder()
                 .reservationId(this.reservationId)
 //                .schedule(this.schedule)
                 .isActive(this.isActive)
