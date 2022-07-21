@@ -32,3 +32,7 @@ application.properties
 log4j.properties
 ### VS Code ###
 .vscode/
+
+### Others ###
+/src/main/resources/application.properties
+/pom.xml
