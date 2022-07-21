@@ -12,11 +12,11 @@ CREATE TABLE public.user (
 );
 
 CREATE TABLE public.role (
-	role_id serial4 NOT NULL,
-	name varchar(255) NOT NULL,
+  role_id serial4 NOT NULL,
+  name varchar(255) NOT NULL,
   created_at timestamp NOT NULL,
   updated_at timestamp NOT NULL,
-	CONSTRAINT roles_pkey PRIMARY KEY (id)
+  CONSTRAINT roles_pkey PRIMARY KEY (role_id)
 );
 
 CREATE TABLE public.studio (
@@ -49,11 +49,11 @@ CREATE TABLE public.seat (
 );
 
 CREATE TABLE public.user_roles (
-	user_id int8 NOT NULL,
-	role_id int8 NOT NULL,
-	CONSTRAINT users_roles_pkey PRIMARY KEY (user_id, role_id),
-	CONSTRAINT user_fkey FOREIGN KEY (user_id) REFERENCES public.user(user_id),
-	CONSTRAINT role_fkey FOREIGN KEY (role_id) REFERENCES public.role(role_id)
+  user_id int8 NOT NULL,
+  role_id int8 NOT NULL,
+  CONSTRAINT users_roles_pkey PRIMARY KEY (user_id, role_id),
+  CONSTRAINT user_fkey FOREIGN KEY (user_id) REFERENCES public.user(user_id),
+  CONSTRAINT role_fkey FOREIGN KEY (role_id) REFERENCES public.role(role_id)
 );
 
 CREATE TABLE public.schedule (
