@@ -44,6 +44,8 @@ public class Film {
                 .genre(this.genre)
                 .filmName(this.filmName)
                 .isPlaying(this.isPlaying)
+                .createdAt(this.createdAt)
+                .updatedAt(this.updatedAt)
                 .build();
     }
 
