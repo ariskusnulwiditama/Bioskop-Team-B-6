@@ -1,6 +1,6 @@
 package TeamB.Bioskop6.entity;
 
-import TeamB.Bioskop6.dto.ScheduleResponeDTO;
+import TeamB.Bioskop6.dto.ScheduleResponseDTO;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -44,8 +44,8 @@ public class Schedule {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    public ScheduleResponeDTO convertToResponse(){
-        return ScheduleResponeDTO.builder()
+    public ScheduleResponseDTO convertToResponse(){
+        return ScheduleResponseDTO.builder()
                 .filmCode(this.film.getFilmCode())
                 .Date(this.Date)
                 .startTime(this.startTime)
