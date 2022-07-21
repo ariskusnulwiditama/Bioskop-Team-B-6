@@ -1,8 +1,8 @@
 package TeamB.Bioskop6.service;
 
-import TeamB.Bioskop6.Helpers.DataNotFoundException;
 import TeamB.Bioskop6.entity.Reservations;
 import TeamB.Bioskop6.entity.Schedule;
+import TeamB.Bioskop6.helper.DataNotFoundException;
 import TeamB.Bioskop6.repository.ReservationsRepository;
 import TeamB.Bioskop6.repository.ScheduleRepository;
 import lombok.AllArgsConstructor;

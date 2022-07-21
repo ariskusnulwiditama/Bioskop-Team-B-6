@@ -1,4 +1,4 @@
-package TeamB.Bioskop6.Helpers;
+package TeamB.Bioskop6.helper;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

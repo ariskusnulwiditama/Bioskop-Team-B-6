@@ -1,4 +1,4 @@
-package TeamB.Bioskop6.controllers;
+package TeamB.Bioskop6.controller;
 
 import TeamB.Bioskop6.dto.FilmResponseDTO;
 import TeamB.Bioskop6.entity.Film;

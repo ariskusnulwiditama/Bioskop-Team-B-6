@@ -1,4 +1,4 @@
-package TeamB.Bioskop6.Helpers;
+package TeamB.Bioskop6.helper;
 
 public class DataNotFoundException extends Throwable{
     public DataNotFoundException(String message) {
