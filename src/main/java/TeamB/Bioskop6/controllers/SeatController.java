@@ -30,13 +30,17 @@ public class SeatController {
         HttpHeaders headers = new HttpHeaders();
         headers.set("APP-NAME", "Bioskop API B");
         //List<Seat> seats = this.seatService.getAllSeat();
-        List<SeatResponseDTO> seatResponseDTO = new ArrayList<>();
-        ResponseEntity<?> body = ResponseHandler.generateResponse("get all seats", HttpStatus.OK, new HttpHeaders(), ZonedDateTime.now(ZoneId.of("Asia/Tokyo")), seatResponseDTO);
-        return ResponseEntity.status(body.getStatusCode()).headers(body.getHeaders()).body(body.getBody());
+        try {
+            List<SeatResponseDTO> seatResponseDTO = new ArrayList<>();
+            ResponseEntity<?> body = ResponseHandler.generateResponse("get all seats", HttpStatus.OK, new HttpHeaders(), ZonedDateTime.now(ZoneId.of("Asia/Tokyo")), seatResponseDTO);
+            return ResponseEntity.status(body.getStatusCode()).headers(body.getHeaders()).body(body.getBody());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).headers(new HttpHeaders()).body(e.getMessage());
+        }
     }
 
     @PostMapping("/seats")
-    public ResponseEntity<?> createSeat(@RequestBody SeatRequestDTO seatRequestDTO) throws DataNotFoundException {
+    public ResponseEntity<?> createSeat(@RequestBody SeatRequestDTO seatRequestDTO) throws ResourceNotFoundException {
         HttpHeaders headers = new HttpHeaders();
         headers.set("APP-NAME", "Bioskop API B");
         Seat newSeat = seatRequestDTO.convertToEntity();
