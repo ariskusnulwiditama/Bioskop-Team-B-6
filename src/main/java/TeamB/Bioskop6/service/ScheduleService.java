@@ -23,26 +23,26 @@ public class ScheduleService {
         return this.scheduleRepository.save(schedule);
     }
 
-    public Schedule getOneSchedule(Integer id) throws DataNotFoundException {
+    public Schedule getOneSchedule(Integer id) throws ResourceNotFoundException {
         Optional<Schedule> optionalSchedule = this.scheduleRepository.findById(id);
 
         if(optionalSchedule.isEmpty()){
-            throw new DataNotFoundException("Schedule is Not Available");
+            throw new ResourceNotFoundException("Schedule is Not Available");
         }
 
         return optionalSchedule.get();
     }
 
-    public Schedule updateScheduleById(Schedule schedule) throws DataNotFoundException {
+    public Schedule updateScheduleById(Schedule schedule) throws ResourceNotFoundException {
         this.getOneSchedule(schedule.getSchaduleId());
 
         return this.scheduleRepository.save(schedule);
     }
 
-    public void deleteScheduleById(Schedule schedule) throws DataNotFoundException {
+    public void deleteScheduleById(Schedule schedule) throws ResourceNotFoundException {
         Optional<Schedule> deletedSchedule = this.scheduleRepository.findById(schedule.getSchaduleId());
         if(deletedSchedule.isEmpty()){
-            throw new DataNotFoundException("Schedule is Not Available");
+            throw new ResourceNotFoundException("Schedule is Not Available");
         }
 
         this.scheduleRepository.delete(deletedSchedule.get());

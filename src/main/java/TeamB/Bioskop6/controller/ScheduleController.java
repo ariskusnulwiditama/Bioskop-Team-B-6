@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import TeamB.Bioskop6.handler.ResponseHandler;
 import TeamB.Bioskop6.helper.ResourceAlreadyExistException;
 import TeamB.Bioskop6.helper.ResourceNotFoundException;
-import TeamB.Bioskop6.service.ScheduleService;
+
 import lombok.AllArgsConstructor;
 
 @RestController
