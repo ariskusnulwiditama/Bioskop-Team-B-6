@@ -34,13 +34,13 @@ public class ScheduleService {
     }
 
     public Schedule updateScheduleById(Schedule schedule) throws ResourceNotFoundException {
-        this.getOneSchedule(schedule.getSchaduleId());
+        this.getOneSchedule(schedule.getScheduleId());
 
         return this.scheduleRepository.save(schedule);
     }
 
     public void deleteScheduleById(Schedule schedule) throws ResourceNotFoundException {
-        Optional<Schedule> deletedSchedule = this.scheduleRepository.findById(schedule.getSchaduleId());
+        Optional<Schedule> deletedSchedule = this.scheduleRepository.findById(schedule.getScheduleId());
         if(deletedSchedule.isEmpty()){
             throw new ResourceNotFoundException("Schedule is Not Available");
         }
