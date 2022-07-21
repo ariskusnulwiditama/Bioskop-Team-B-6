@@ -37,7 +37,7 @@ public class UserController {
      * @return
      */
     @GetMapping("/users")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN', 'ROLE_USER')")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_USER')")
     public ResponseEntity<Object> getAllUsers() {
         HttpHeaders headers = new HttpHeaders();
         headers.set("APP-NAME", "Bioskop6 API KELOMPOK B");
