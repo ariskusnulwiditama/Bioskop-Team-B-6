@@ -60,7 +60,6 @@ public class User {
             .lastName(lastName)
             .username(username)
             .emailAddress(emailAddress)
-            .password(password)
             .createdAt(createdAt)
             .updatedAt(updatedAt)
             .build();

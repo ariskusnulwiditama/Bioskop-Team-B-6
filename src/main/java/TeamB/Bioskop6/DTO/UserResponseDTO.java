@@ -24,8 +24,6 @@ public class UserResponseDTO {
     
     private String emailAddress;
     
-    private String password;
-
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
