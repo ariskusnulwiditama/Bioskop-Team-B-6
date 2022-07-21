@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import TeamB.Bioskop6.dto.StudioResponseDTO;
 import lombok.*;
 
 @Entity
@@ -34,4 +35,15 @@ public class Studio {
 
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    public StudioResponseDTO convertToResponse(){
+        return StudioResponseDTO.builder()
+            .studioId(this.studioId)
+            .studioName(this.studioName)
+            .type(this.type)
+            .capacity(this.capacity)
+            .createdAt(this.createdAt)
+            .updatedAt(this.updatedAt)
+            .build();
+    }
 }
