@@ -35,4 +35,3 @@ log4j.properties
 
 ### Others ###
 /src/main/resources/application.properties
-/pom.xml
