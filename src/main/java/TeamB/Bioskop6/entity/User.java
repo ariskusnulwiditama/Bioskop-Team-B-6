@@ -18,7 +18,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "user", schema = "public", uniqueConstraints = {@UniqueConstraint(columnNames = "username"), @UniqueConstraint(columnNames = "email")})
+@Table(name = "user", schema = "public", uniqueConstraints = {@UniqueConstraint(columnNames = "username"), @UniqueConstraint(columnNames = "emailAddress")})
 public class User {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -34,6 +34,7 @@ public class User {
     
     private String password;
     
+    @Builder.Default
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
@@ -43,6 +44,14 @@ public class User {
 
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    public User(String firstName, String lastName, String username, String emailAddress, String password) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.username = username;
+        this.emailAddress = emailAddress;
+        this.password = password;
+    }
 
     public UserResponseDTO convertToResponse(){
         return UserResponseDTO.builder()
