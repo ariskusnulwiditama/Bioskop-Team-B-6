@@ -14,7 +14,7 @@ import java.time.LocalTime;
 @Setter
 @AllArgsConstructor
 @Builder
-public class ScheduleResponeDTO {
+public class ScheduleResponseDTO {
 
     private Integer filmCode;
 
