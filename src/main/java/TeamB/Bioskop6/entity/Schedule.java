@@ -20,7 +20,7 @@ import java.time.LocalTime;
 public class Schedule {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer schaduleId;
+    private Integer scheduleId;
 
     @ManyToOne
     @JoinColumn(name = "film_code")
@@ -59,7 +59,7 @@ public class Schedule {
     @Override
     public String toString() {
         return "Schedule{" +
-                "schaduleId=" + schaduleId +
+                "schaduleId=" + scheduleId +
                 ", film=" + film +
                 ", Date=" + Date +
                 ", startTime=" + startTime +
