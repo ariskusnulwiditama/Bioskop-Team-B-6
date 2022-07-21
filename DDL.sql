@@ -4,7 +4,7 @@ CREATE TABLE public.user (
   last_name varchar(50) NULL,
   username varchar(50) NOT NULL,
   email_address varchar(50) NOT NULL,
-  password varchar(50) NOT NULL,
+  password varchar NOT NULL,
   created_at timestamp NOT NULL,
   updated_at timestamp NOT NULL,
   CONSTRAINT user_pkey PRIMARY KEY (user_id),
