@@ -1,6 +1,6 @@
 package TeamB.Bioskop6.service;
 
-import TeamB.Bioskop6.Helpers.DataNotFoundException;
+import TeamB.Bioskop6.helper.DataNotFoundException;
 import TeamB.Bioskop6.entity.Seat;
 import TeamB.Bioskop6.repository.SeatRepository;
 import lombok.AllArgsConstructor;

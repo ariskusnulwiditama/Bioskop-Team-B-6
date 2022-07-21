@@ -13,7 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpHeaders;
-import java.time.ZoneId;
+
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -58,7 +58,7 @@ public class SeatController {
     }
 
     @GetMapping("/seat/{id}")
-    public ResponseEntity<Object> getOneSeat(@PathVariable Integer id) throws ResourceNotFoundException {
+    public ResponseEntity<Object> getOneSeat(@PathVariable Integer id) throws ResourceNotFoundException, DataNotFoundException {
         HttpHeaders headers = new HttpHeaders();
         headers.set("APP-NAME", "Bioskop API B");
         try {
@@ -71,7 +71,7 @@ public class SeatController {
     }
 
     @PostMapping("/seat/{id}")
-    public ResponseEntity<Object> updateSeatById(@PathVariable Integer id, @RequestBody SeatRequestDTO seatRequestDTO) throws ResourceNotFoundException {
+    public ResponseEntity<Object> updateSeatById(@PathVariable Integer id, @RequestBody SeatRequestDTO seatRequestDTO) throws ResourceNotFoundException, DataNotFoundException {
         HttpHeaders headers = new HttpHeaders();
         headers.set("APP-NAME", "Bioskop API B");
         try {
@@ -85,7 +85,7 @@ public class SeatController {
     }
 
     @DeleteMapping("/seat/{id}")
-    public ResponseEntity<Object> deleteSeatById(@PathVariable Integer id) throws ResourceNotFoundException {
+    public ResponseEntity<Object> deleteSeatById(@PathVariable Integer id) throws ResourceNotFoundException, DataNotFoundException {
         HttpHeaders headers = new HttpHeaders();
         headers.set("APP-NAME", "Bioskop API B");
         try {
