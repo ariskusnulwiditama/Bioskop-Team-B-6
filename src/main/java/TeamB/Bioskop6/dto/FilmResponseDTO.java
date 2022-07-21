@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -17,5 +19,9 @@ public class FilmResponseDTO {
     private String genre;
 
     private Boolean isPlaying;
+
+    private LocalDateTime createdAt;
+
+    private LocalDateTime updatedAt;
 
 }

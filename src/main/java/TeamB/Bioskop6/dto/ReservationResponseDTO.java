@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 public class ReservationResponseDTO {
 
     private Integer reservationId;
-    private Integer scheduleId;
+//    private Integer scheduleId;
     private Boolean isActive;
 
     private LocalDateTime createdAt;

@@ -1,51 +1,19 @@
 package TeamB.Bioskop6.service;
 
-import TeamB.Bioskop6.Helpers.DataNotFoundException;
+import TeamB.Bioskop6.Helpers.ResourceAlreadyExistException;
+import TeamB.Bioskop6.Helpers.ResourceNotFoundException;
 import TeamB.Bioskop6.entity.Film;
-import TeamB.Bioskop6.repository.FilmRepository;
-import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
-@Service
-@AllArgsConstructor
-public class FilmService {
-    private final FilmRepository filmRepository;
+public interface FilmService {
+    List<Film> getAllFilm();
 
-    public List<Film> getAllFilm(){
-        return this.filmRepository.findAll();
-    }
+    Film getFilmById(Integer id) throws ResourceNotFoundException;
 
-    public Film getOneFilm(Integer id) throws DataNotFoundException {
-        Optional<Film> optionalFilm = this.filmRepository.findById(id);
+    Film createFilm(Film film) throws ResourceAlreadyExistException;
 
-        if(optionalFilm.isEmpty()){
-            throw new DataNotFoundException("Film is Not Available");
-        }
+    Film updateFilm(Film film) throws ResourceNotFoundException;
 
-        return optionalFilm.get();
-
-    }
-
-    public Film createFilm (Film film){
-        return this.filmRepository.save(film);
-    }
-
-    public Film updateFilm(Film film) throws DataNotFoundException {
-        this.getOneFilm(film.getFilmCode());
-
-        return this.filmRepository.save(film);
-    }
-
-    public void deleteFilm(Film films) throws DataNotFoundException{
-        Optional<Film> deleteFilm = this.filmRepository.findById(films.getFilmCode());
-
-        if(deleteFilm.isEmpty()){
-            throw new DataNotFoundException("Film is Not Found");
-        }
-
-        this.filmRepository.delete(deleteFilm.get());
-    }
+    void deleteFilm(Integer id) throws ResourceNotFoundException;
 }
