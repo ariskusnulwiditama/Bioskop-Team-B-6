@@ -1,19 +1,19 @@
 package TeamB.Bioskop6.service;
 
-import java.util.List;
+import org.springframework.http.ResponseEntity;
 
-import TeamB.Bioskop6.entity.Studio;
+import TeamB.Bioskop6.dto.StudioRequestDTO;
 import TeamB.Bioskop6.helper.ResourceAlreadyExistException;
 import TeamB.Bioskop6.helper.ResourceNotFoundException;
 
 public interface StudioService {
-    List<Studio> getAllStudios();
+    ResponseEntity<?> getAllStudios();
 
-    Studio getStudioById(Integer id) throws ResourceNotFoundException;
+    ResponseEntity<?> getStudioById(Integer id) throws ResourceNotFoundException;
 
-    Studio createStudio(Studio studio) throws ResourceAlreadyExistException;
+    ResponseEntity<?> createStudio(StudioRequestDTO studioRequestDTO) throws ResourceAlreadyExistException;
 
-    Studio updateStudio(Studio studio) throws ResourceNotFoundException;
+    ResponseEntity<?> updateStudio(StudioRequestDTO studioRequestDTO) throws ResourceNotFoundException;
 
-    void deleteStudio(Integer id) throws ResourceNotFoundException;
+    ResponseEntity<?> deleteStudio(Integer id) throws ResourceNotFoundException;
 }

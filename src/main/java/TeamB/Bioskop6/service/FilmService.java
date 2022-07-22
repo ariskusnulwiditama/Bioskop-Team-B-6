@@ -1,18 +1,19 @@
 package TeamB.Bioskop6.service;
 
-import TeamB.Bioskop6.entity.Film;
+import TeamB.Bioskop6.dto.FilmRequestDTO;
 import TeamB.Bioskop6.helper.ResourceNotFoundException;
 import TeamB.Bioskop6.helper.ResourceAlreadyExistException;
-import java.util.List;
+
+import org.springframework.http.ResponseEntity;
 
 public interface FilmService {
-    List<Film> getAllFilm();
+    ResponseEntity<?> getAllFilm();
 
-    Film getFilmById(Integer id) throws ResourceNotFoundException;
+    ResponseEntity<?> getFilmById(Integer code) throws ResourceNotFoundException;
 
-    Film createFilm(Film film) throws ResourceAlreadyExistException;
+    ResponseEntity<?> createFilm(FilmRequestDTO filmRequestDTO) throws ResourceAlreadyExistException;
 
-    Film updateFilm(Film film) throws ResourceNotFoundException;
+    ResponseEntity<?> updateFilm(FilmRequestDTO filmRequestDTO) throws ResourceNotFoundException;
 
-    void deleteFilm(Integer id) throws ResourceNotFoundException;
+    ResponseEntity<?> deleteFilm(Integer id) throws ResourceNotFoundException;
 }

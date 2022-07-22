@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -22,6 +23,7 @@ public class ReservationsController {
      * @return
      */
     @GetMapping("/reservations")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_USER')")
     public ResponseEntity<?> getAllReservations() {
         return reservationService.getAllReservation();
     }
@@ -33,6 +35,7 @@ public class ReservationsController {
      * @throws ResourceNotFoundException
      */
     @GetMapping("/reservation/{id}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<?> getReservationsById(@PathVariable Integer id) throws ResourceNotFoundException {
         return reservationService.getReservationById(id);
     }
@@ -44,6 +47,7 @@ public class ReservationsController {
      * @throws ResourceAlreadyExistException
      */
     @PostMapping("/reservation/create")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<?> createReservations(ReservationRequestDTO reservationRequestDTO) throws ResourceAlreadyExistException {
         return reservationService.createReservation(reservationRequestDTO);
     }
@@ -55,6 +59,7 @@ public class ReservationsController {
      * @throws ResourceNotFoundException
      */
     @PutMapping("/reservation/update")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<?> updateReservations(ReservationRequestDTO reservationRequestDTO) throws ResourceNotFoundException {
         return reservationService.updateReservation(reservationRequestDTO);
     }
@@ -66,6 +71,7 @@ public class ReservationsController {
      * @throws ResourceNotFoundException
      */
     @DeleteMapping("/reservation/delete/{id}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<?> deleteReservations(@PathVariable Integer id) throws ResourceNotFoundException {
         return reservationService.deleteReservation(id);
     }

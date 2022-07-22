@@ -21,11 +21,21 @@ public class AuthController {
     @Autowired
     AuthServiceImpl authServiceImpl;
 
+    /***
+     * Endpoint to sign in and get the token for accessing the CRUD system
+     * @param loginRequest
+     * @return
+     */
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest){
         return authServiceImpl.authenticateUser(loginRequest);
     }
 
+    /***
+     * Endpoint for createing new user with their roles
+     * @param signupRequest
+     * @return
+     */
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signupRequest){
         return authServiceImpl.registerUser(signupRequest);
