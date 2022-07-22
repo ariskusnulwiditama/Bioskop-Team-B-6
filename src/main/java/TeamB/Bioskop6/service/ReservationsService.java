@@ -1,21 +1,21 @@
 package TeamB.Bioskop6.service;
 
-import TeamB.Bioskop6.entity.Reservations;
+import TeamB.Bioskop6.dto.ReservationRequestDTO;
 
 import TeamB.Bioskop6.helper.ResourceNotFoundException;
 import TeamB.Bioskop6.helper.ResourceAlreadyExistException;
 
-import java.util.List;
+import org.springframework.http.ResponseEntity;
 
 public interface ReservationsService {
 
-    List<Reservations> getAllReservations();
+    ResponseEntity<?> getAllReservation();
 
-    Reservations getReservationsById(Integer id) throws ResourceNotFoundException;
+    ResponseEntity<?> getReservationById(Integer id) throws ResourceNotFoundException;
 
-    Reservations createReservations(Reservations reservations) throws ResourceAlreadyExistException;
+    ResponseEntity<?> createReservation(ReservationRequestDTO reservationRequestDTO) throws ResourceAlreadyExistException;
 
-    Reservations updateReservations(Reservations reservations) throws ResourceNotFoundException;
+    ResponseEntity<?> updateReservation(ReservationRequestDTO reservationRequestDTO) throws ResourceNotFoundException;
 
-    void deleteReservations(Integer id) throws ResourceNotFoundException;
+    ResponseEntity<?> deleteReservation(Integer id) throws ResourceNotFoundException;
 }

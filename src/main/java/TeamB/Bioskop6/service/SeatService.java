@@ -1,14 +1,19 @@
 package TeamB.Bioskop6.service;
 
-import TeamB.Bioskop6.entity.Seat;
-import TeamB.Bioskop6.helper.DataNotFoundException;
+import org.springframework.http.ResponseEntity;
 
-import java.util.List;
+import TeamB.Bioskop6.dto.SeatRequestDTO;
+import TeamB.Bioskop6.helper.ResourceAlreadyExistException;
+import TeamB.Bioskop6.helper.ResourceNotFoundException;
 
 public interface SeatService {
-    List<Seat> getAllSeat();
-    Seat createSeat (Seat seat);
-    Seat getOneSeat(Integer id) throws DataNotFoundException;
-    Seat updateSeatById(Seat seat) throws DataNotFoundException;
-    void deleteSeatById(Integer id) throws DataNotFoundException;
+    ResponseEntity<?> getAllSeat();
+
+    ResponseEntity<?> getSeatById(Integer id) throws ResourceNotFoundException;
+
+    ResponseEntity<?> createSeat(SeatRequestDTO seatRequestDTO) throws ResourceAlreadyExistException;
+    
+    ResponseEntity<?> updateSeat(SeatRequestDTO seatRequestDTO) throws ResourceNotFoundException;
+    
+    ResponseEntity<?> deleteSeat(Integer id) throws ResourceNotFoundException;
 }
