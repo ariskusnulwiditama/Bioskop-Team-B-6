@@ -5,6 +5,7 @@ import TeamB.Bioskop6.helper.ResourceAlreadyExistException;
 import TeamB.Bioskop6.helper.ResourceNotFoundException;
 import TeamB.Bioskop6.dto.SeatRequestDTO;
 import TeamB.Bioskop6.service.SeatService;
+
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api")
 public class SeatController {
     @Autowired
-    private final SeatService seatService;
+    private final SeatServiceImpl seatServiceImpl;
 
     /***
      * Get All data from seat table into list
