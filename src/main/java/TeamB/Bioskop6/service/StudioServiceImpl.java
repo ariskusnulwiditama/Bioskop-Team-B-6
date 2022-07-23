@@ -25,7 +25,7 @@ public class StudioServiceImpl implements StudioService {
     @Autowired
     StudioRepository studioRepository;
     
-    HttpHeaders headers = new HttpHeaders();
+    private final HttpHeaders headers = new HttpHeaders();
     
     @Override
     public ResponseEntity<?> getAllStudios() {

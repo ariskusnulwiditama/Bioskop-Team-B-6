@@ -1,6 +1,5 @@
 package TeamB.Bioskop6.controller;
 
-import TeamB.Bioskop6.helper.DataNotFoundException;
 import TeamB.Bioskop6.helper.ResourceAlreadyExistException;
 import TeamB.Bioskop6.helper.ResourceNotFoundException;
 import TeamB.Bioskop6.dto.SeatRequestDTO;
@@ -24,7 +23,7 @@ public class SeatController {
      */
     @GetMapping("/seats")
     @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_USER')")
-    public ResponseEntity<?> getAllSeats() {
+    public ResponseEntity<?> getAll() {
         return seatService.getAllSeat();
     }
 
@@ -36,7 +35,7 @@ public class SeatController {
      */
     @GetMapping("/seat/{id}")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<?> get(@PathVariable Integer id) throws ResourceNotFoundException {
+    public ResponseEntity<?> getById(@PathVariable Integer id) throws ResourceNotFoundException {
         return seatService.getSeatById(id);
     }
 
@@ -74,7 +73,7 @@ public class SeatController {
      */
     @DeleteMapping("/seat/{id}")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<?> delete(@PathVariable Integer id) throws ResourceNotFoundException, DataNotFoundException {
+    public ResponseEntity<?> delete(@PathVariable Integer id) throws ResourceNotFoundException {
         return seatService.deleteSeat(id);
     }
 }

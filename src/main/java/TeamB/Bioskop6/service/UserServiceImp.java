@@ -25,7 +25,7 @@ public class UserServiceImp implements UserService {
     @Autowired
     UserRepository userRepository;
 
-    HttpHeaders headers = new HttpHeaders();
+    private final HttpHeaders headers = new HttpHeaders();
 
     @Override
     public ResponseEntity<?> getAllUser() {

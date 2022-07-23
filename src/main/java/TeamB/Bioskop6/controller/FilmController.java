@@ -21,7 +21,7 @@ public class FilmController {
      */
     @GetMapping("/film")
     @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_USER')")
-    public ResponseEntity<?> getAllfilm() {
+    public ResponseEntity<?> getAll() {
         return filmService.getAllFilm();
     }
 
@@ -33,7 +33,7 @@ public class FilmController {
      */
     @GetMapping("/film/{id}")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<?> getFilmById(@PathVariable Integer id) throws ResourceNotFoundException {
+    public ResponseEntity<?> getById(@PathVariable Integer id) throws ResourceNotFoundException {
         return filmService.getFilmById(id);
     }
 
@@ -45,7 +45,7 @@ public class FilmController {
      */
     @PostMapping("/film/create")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<?> createfilm(FilmRequestDTO filmRequestDTO) throws ResourceAlreadyExistException {
+    public ResponseEntity<?> create(FilmRequestDTO filmRequestDTO) throws ResourceAlreadyExistException {
         return filmService.createFilm(filmRequestDTO);
     }
 
@@ -57,7 +57,7 @@ public class FilmController {
      */
     @PutMapping("/film/update")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<?> updateUser(FilmRequestDTO filmRequestDTO) throws ResourceNotFoundException {
+    public ResponseEntity<?> update(FilmRequestDTO filmRequestDTO) throws ResourceNotFoundException {
         return filmService.updateFilm(filmRequestDTO);
     }
 
@@ -69,7 +69,7 @@ public class FilmController {
      */
     @DeleteMapping("/film/delete/{id}")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<?> deleteFilm(@PathVariable Integer id) throws ResourceNotFoundException {
+    public ResponseEntity<?> delete(@PathVariable Integer id) throws ResourceNotFoundException {
         return filmService.deleteFilm(id);
     }
 }

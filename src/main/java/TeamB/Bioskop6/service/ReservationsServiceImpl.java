@@ -7,7 +7,7 @@ import TeamB.Bioskop6.dto.ReservationRequestDTO;
 import TeamB.Bioskop6.dto.ReservationResponseDTO;
 import TeamB.Bioskop6.entity.Reservation;
 import TeamB.Bioskop6.handler.ResponseHandler;
-import lombok.AllArgsConstructor;
+import lombok.*;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -25,10 +25,7 @@ public class ReservationsServiceImpl implements ReservationsService {
     @Autowired
     ReservationsRepository reservationRepository;
 
-    @Autowired
-    ReservationRequestDTO reservationRequestDTO;
-    
-    HttpHeaders headers = new HttpHeaders();
+    private final HttpHeaders headers = new HttpHeaders();
 
     @Override
     public ResponseEntity<?> getAllReservation() {

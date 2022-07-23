@@ -1,5 +1,7 @@
 package TeamB.Bioskop6.controller;
 
+import java.util.UUID;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,10 +10,18 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import TeamB.Bioskop6.dto.ConfirmOTPRequestDTO;
+import TeamB.Bioskop6.dto.ForgetPasswordRequestDTO;
 import TeamB.Bioskop6.dto.LoginRequest;
+import TeamB.Bioskop6.dto.ResetPasswordRequestDTO;
 import TeamB.Bioskop6.dto.SignupRequest;
+import TeamB.Bioskop6.helper.PasswordNotMatchException;
+import TeamB.Bioskop6.helper.ResourceAlreadyExistException;
+import TeamB.Bioskop6.helper.ResourceNotFoundException;
+import TeamB.Bioskop6.helper.WrongOTPException;
 import TeamB.Bioskop6.service.AuthServiceImpl;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -27,7 +37,7 @@ public class AuthController {
      * @return
      */
     @PostMapping("/signin")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest){
+    public ResponseEntity<?> authenticate(@Valid @RequestBody LoginRequest loginRequest){
         return authServiceImpl.authenticateUser(loginRequest);
     }
 
@@ -35,9 +45,46 @@ public class AuthController {
      * Endpoint for createing new user with their roles
      * @param signupRequest
      * @return
+     * @throws ResourceAlreadyExistException
      */
     @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signupRequest){
+    public ResponseEntity<?> register(@Valid @RequestBody SignupRequest signupRequest) throws ResourceAlreadyExistException{
         return authServiceImpl.registerUser(signupRequest);
+    }
+
+    /***
+     * Enpoint for generating OTP to reset password
+     * @param forgetPasswordRequestDTO
+     * @return
+     * @throws ResourceNotFoundException
+     */
+    @PostMapping("/forget_password")
+    public ResponseEntity<?> forgetPassword(@Valid @RequestBody ForgetPasswordRequestDTO forgetPasswordRequestDTO) throws ResourceNotFoundException {
+        return authServiceImpl.forgetPassword(forgetPasswordRequestDTO);
+    }
+
+    /***
+     * Enpont for generating reset password token
+     * @param confirmOTPRequestDTO
+     * @return
+     * @throws WrongOTPException
+     * @throws ResourceNotFoundException
+     */
+    @PostMapping("/confirm_dto")
+    public ResponseEntity<?> confirmOTP(@Valid @RequestBody ConfirmOTPRequestDTO confirmOTPRequestDTO) throws WrongOTPException, ResourceNotFoundException {
+        return authServiceImpl.confirmOTP(confirmOTPRequestDTO);
+    }
+
+    /***
+     * Enpoint for resetting password
+     * @param token
+     * @param resetPasswordRequestDTO
+     * @return
+     * @throws PasswordNotMatchException
+     * @throws ResourceNotFoundException
+     */
+    @PostMapping("/reset_password")
+    public ResponseEntity<?> resetPassword(@RequestParam("token") UUID token, @Valid @RequestBody ResetPasswordRequestDTO resetPasswordRequestDTO) throws PasswordNotMatchException, ResourceNotFoundException {
+        return authServiceImpl.resetPassword(token, resetPasswordRequestDTO);
     }
 }

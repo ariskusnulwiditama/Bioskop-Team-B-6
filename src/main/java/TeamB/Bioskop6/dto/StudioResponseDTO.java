@@ -2,6 +2,7 @@ package TeamB.Bioskop6.dto;
 
 import java.time.LocalDateTime;
 
+import TeamB.Bioskop6.constant.EStudioType;
 import lombok.*;
 
 @AllArgsConstructor
@@ -14,7 +15,7 @@ public class StudioResponseDTO {
 
     private String studioName;
 
-    private String type;
+    private EStudioType type;
 
     private String capacity;
 

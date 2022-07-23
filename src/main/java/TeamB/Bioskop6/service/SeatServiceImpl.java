@@ -25,7 +25,7 @@ public class SeatServiceImpl implements SeatService {
     @Autowired
     SeatRepository seatRepository;
 
-    HttpHeaders headers = new HttpHeaders();
+    private final HttpHeaders headers = new HttpHeaders();
     
     @Override
     public ResponseEntity<?> getAllSeat() {

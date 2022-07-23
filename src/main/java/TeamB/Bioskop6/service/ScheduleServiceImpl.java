@@ -25,7 +25,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Autowired
     ScheduleRepository scheduleRepository;
     
-    HttpHeaders headers = new HttpHeaders();
+    private final HttpHeaders headers = new HttpHeaders();
 
     @Override
     public ResponseEntity<?> getAllSchedule() {

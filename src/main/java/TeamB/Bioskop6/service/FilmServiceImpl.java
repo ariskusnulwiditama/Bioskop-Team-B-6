@@ -27,7 +27,7 @@ public class FilmServiceImpl implements FilmService {
     @Autowired
     FilmRepository filmRepository;
 
-    HttpHeaders headers = new HttpHeaders();
+    private final HttpHeaders headers = new HttpHeaders();
 
     @Override
     public ResponseEntity<?> getAllFilm() {
