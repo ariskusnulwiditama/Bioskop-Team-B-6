@@ -77,11 +77,17 @@ public class AuthServiceImpl implements AuthService {
     @Value("${server.port}")
     String port;
 
+    @Value("${com.app.name}")
+    String projectName;
+
+    @Value("${com.app.team}")
+    String projectTeam;
+
     private final HttpHeaders headers = new HttpHeaders();
 
     @Override
     public ResponseEntity<?> authenticateUser(LoginRequest loginRequest) {
-        headers.set("APP-NAME", "Bioskop6 API KELOMPOK B");
+        headers.set("APP-NAME", projectName + "-API " + projectTeam);
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtUtils.generateJwtToken(authentication);
@@ -92,7 +98,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public ResponseEntity<?> registerUser(SignupRequest signupRequest) throws ResourceAlreadyExistException {
-        headers.set("APP-NAME", "Bioskop6 API KELOMPOK B");
+        headers.set("APP-NAME", projectName + "-API " + projectTeam);
         try {
             if (userRepository.existsByUsername(signupRequest.getUsername())) {
                 throw new ResourceAlreadyExistException("Username already taken!");
@@ -137,7 +143,7 @@ public class AuthServiceImpl implements AuthService {
     
     @Override
     public ResponseEntity<?> forgetPassword(ForgetPasswordRequestDTO forgetPasswordRequestDTO) throws ResourceNotFoundException, MessagingException {
-        headers.set("APP-NAME", "Bioskop6 API KELOMPOK B");
+        headers.set("APP-NAME", projectName + "-API " + projectTeam);
         try {
             if (!userRepository.existsByEmailAddress(forgetPasswordRequestDTO.getEmailAddress())) {
                 throw new ResourceNotFoundException("User with email " + forgetPasswordRequestDTO.getEmailAddress() + " does not exist!");
@@ -156,7 +162,7 @@ public class AuthServiceImpl implements AuthService {
     
     @Override
     public ResponseEntity<?> confirmOTP(ConfirmOTPRequestDTO confirmOTPRequestDTO) throws WrongOTPException, ResourceNotFoundException{
-        headers.set("APP-NAME", "Bioskop6 API KELOMPOK B");
+        headers.set("APP-NAME", projectName + "-API " + projectTeam);
         try {
             if (otpService.getOTP(confirmOTPRequestDTO.getEmailAddress()) == 0) {
                 throw new ResourceNotFoundException("You have not generated OTP!");
@@ -175,7 +181,7 @@ public class AuthServiceImpl implements AuthService {
     
     @Override
     public ResponseEntity<?> resetPassword(UUID token ,ResetPasswordRequestDTO resetPasswordRequestDTO) throws PasswordNotMatchException, ResourceNotFoundException {
-        headers.set("APP-NAME", "Bioskop6 API KELOMPOK B");
+        headers.set("APP-NAME", projectName + "-API " + projectTeam);
         try {
             if (!resetPasswordRequestDTO.getNewPassword().equals(resetPasswordRequestDTO.getConfirmPassword())) {
                 throw new PasswordNotMatchException("Password not match!");

@@ -74,7 +74,7 @@ public class AuthController {
      * @throws WrongOTPException
      * @throws ResourceNotFoundException
      */
-    @PostMapping("/confirm_dto")
+    @PostMapping("/confirm_otp")
     public ResponseEntity<?> confirmOTP(@Valid @RequestBody ConfirmOTPRequestDTO confirmOTPRequestDTO) throws WrongOTPException, ResourceNotFoundException {
         return authServiceImpl.confirmOTP(confirmOTPRequestDTO);
     }

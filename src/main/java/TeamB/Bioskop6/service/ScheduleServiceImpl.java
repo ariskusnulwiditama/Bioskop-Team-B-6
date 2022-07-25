@@ -7,9 +7,9 @@ import TeamB.Bioskop6.handler.ResponseHandler;
 import TeamB.Bioskop6.helper.ResourceAlreadyExistException;
 import TeamB.Bioskop6.helper.ResourceNotFoundException;
 import TeamB.Bioskop6.repository.ScheduleRepository;
-import lombok.AllArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,16 +20,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@AllArgsConstructor
 public class ScheduleServiceImpl implements ScheduleService {
     @Autowired
     ScheduleRepository scheduleRepository;
     
     private final HttpHeaders headers = new HttpHeaders();
 
+    @Value("${com.app.name}")
+    String projectName;
+
+    @Value("${com.app.team}")
+    String projectTeam;
+
     @Override
     public ResponseEntity<?> getAllSchedule() {
-        headers.set("APP-NAME", "Bioskop6 API KELOMPOK B");
+        headers.set("APP-NAME", projectName + "-API " + projectTeam);
         try {
             List<Schedule> scheduleList = scheduleRepository.findAll();
             List<ScheduleResponseDTO> scheduleResponseDTOs = new ArrayList<>();
@@ -44,7 +49,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     @Override
     public ResponseEntity<?> getScheduleById(Integer id) throws ResourceNotFoundException {
-        headers.set("APP-NAME", "Bioskop6 API KELOMPOK B");
+        headers.set("APP-NAME", projectName + "-API " + projectTeam);
         try {
             Schedule schedule = scheduleRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Schedule with ID " + id + " is not available!"));
             ScheduleResponseDTO scheduleResponseDTO = schedule.convertToResponse();
@@ -56,7 +61,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     @Override
     public ResponseEntity<?> createSchedule(ScheduleRequestDTO scheduleRequestDTO) throws ResourceAlreadyExistException {
-        headers.set("APP-NAME", "Bioskop6 API KELOMPOK B");
+        headers.set("APP-NAME", projectName + "-API " + projectTeam);
         try {
             Schedule schedule = scheduleRequestDTO.convertToEntity();
             scheduleRepository.findById(schedule.getScheduleId()).orElseThrow(() -> new ResourceAlreadyExistException("Schedule with ID " + schedule.getScheduleId() + " is already exist!"));
@@ -69,7 +74,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     @Override
     public ResponseEntity<?> updateSchedule(ScheduleRequestDTO scheduleRequestDTO) throws ResourceNotFoundException {
-        headers.set("APP-NAME", "Bioskop6 API KELOMPOK B");
+        headers.set("APP-NAME", projectName + "-API " + projectTeam);
         try {
             Schedule schedule = scheduleRequestDTO.convertToEntity();
             scheduleRepository.findById(schedule.getScheduleId()).orElseThrow(() -> new ResourceNotFoundException("Schedule with ID " + schedule.getScheduleId() + " is not available!"));
@@ -82,7 +87,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     @Override
     public ResponseEntity<?> deleteSchedule(Integer id) throws ResourceNotFoundException {
-        headers.set("APP-NAME", "Bioskop6 API KELOMPOK B");
+        headers.set("APP-NAME", projectName + "-API " + projectTeam);
         try {
             Schedule schedule = scheduleRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Schedule with ID " + id + " is not available!"));
             scheduleRepository.delete(schedule);
