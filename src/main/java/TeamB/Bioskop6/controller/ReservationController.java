@@ -4,6 +4,8 @@ import TeamB.Bioskop6.helper.ResourceAlreadyExistException;
 import TeamB.Bioskop6.helper.ResourceNotFoundException;
 import TeamB.Bioskop6.dto.ReservationRequestDTO;
 import TeamB.Bioskop6.service.ReservationsServiceImpl;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +16,10 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @AllArgsConstructor
-public class ReservationsController {
+@RequestMapping("/api")
+@Tag(name = "6. Reservation Controller")
+@SecurityRequirement(name = "bearer-key")
+public class ReservationController {
     @Autowired
     ReservationsServiceImpl reservationService;
 
@@ -24,7 +29,7 @@ public class ReservationsController {
      */
     @GetMapping("/reservations")
     @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_USER')")
-    public ResponseEntity<?> getAllReservations() {
+    public ResponseEntity<?> getAll() {
         return reservationService.getAllReservation();
     }
 
@@ -36,7 +41,7 @@ public class ReservationsController {
      */
     @GetMapping("/reservation/{id}")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<?> getReservationsById(@PathVariable Integer id) throws ResourceNotFoundException {
+    public ResponseEntity<?> getById(@PathVariable Integer id) throws ResourceNotFoundException {
         return reservationService.getReservationById(id);
     }
 
@@ -48,7 +53,7 @@ public class ReservationsController {
      */
     @PostMapping("/reservation/create")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<?> createReservations(ReservationRequestDTO reservationRequestDTO) throws ResourceAlreadyExistException {
+    public ResponseEntity<?> create(ReservationRequestDTO reservationRequestDTO) throws ResourceAlreadyExistException {
         return reservationService.createReservation(reservationRequestDTO);
     }
 
@@ -60,7 +65,7 @@ public class ReservationsController {
      */
     @PutMapping("/reservation/update")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<?> updateReservations(ReservationRequestDTO reservationRequestDTO) throws ResourceNotFoundException {
+    public ResponseEntity<?> update(ReservationRequestDTO reservationRequestDTO) throws ResourceNotFoundException {
         return reservationService.updateReservation(reservationRequestDTO);
     }
 

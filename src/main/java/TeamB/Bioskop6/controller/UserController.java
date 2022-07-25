@@ -14,11 +14,15 @@ import TeamB.Bioskop6.dto.UserRequestDTO;
 import TeamB.Bioskop6.helper.ResourceAlreadyExistException;
 import TeamB.Bioskop6.helper.ResourceNotFoundException;
 import TeamB.Bioskop6.service.UserService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api")
+@Tag(name = "2. User Controller")
+@SecurityRequirement(name = "bearer-key")
 public class UserController {
     
     private final UserService userService;
@@ -29,7 +33,7 @@ public class UserController {
      */
     @GetMapping("/users")
     @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_USER')")
-    public ResponseEntity<?> getAllUsers() {
+    public ResponseEntity<?> getAll() {
         return userService.getAllUser();
     }
 
@@ -41,7 +45,7 @@ public class UserController {
      */
     @GetMapping("/user/{id}")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<?> getUserById(@PathVariable Integer id) throws ResourceNotFoundException {
+    public ResponseEntity<?> getById(@PathVariable Integer id) throws ResourceNotFoundException {
         return userService.getUserById(id);
     }
 
@@ -53,7 +57,7 @@ public class UserController {
      */
     @PostMapping("/user/create")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<?> createUser(UserRequestDTO userRequestDTO) throws ResourceAlreadyExistException {
+    public ResponseEntity<?> create(UserRequestDTO userRequestDTO) throws ResourceAlreadyExistException {
         return userService.createUser(userRequestDTO);
     }
     
@@ -65,7 +69,7 @@ public class UserController {
      */
     @PutMapping("/user/update")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<?> updateUser(UserRequestDTO userRequestDTO) throws ResourceNotFoundException {
+    public ResponseEntity<?> update(UserRequestDTO userRequestDTO) throws ResourceNotFoundException {
         return userService.updateUser(userRequestDTO);
     }
     
@@ -77,7 +81,7 @@ public class UserController {
      */
     @DeleteMapping("/user/delete/{id}")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<?> deleteUser(@PathVariable Integer id) throws ResourceNotFoundException {
+    public ResponseEntity<?> delete(@PathVariable Integer id) throws ResourceNotFoundException {
         return userService.deleteUser(id);
     }
 }

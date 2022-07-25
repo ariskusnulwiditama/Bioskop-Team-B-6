@@ -14,11 +14,15 @@ import TeamB.Bioskop6.dto.StudioRequestDTO;
 import TeamB.Bioskop6.helper.ResourceAlreadyExistException;
 import TeamB.Bioskop6.helper.ResourceNotFoundException;
 import TeamB.Bioskop6.service.StudioService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api")
+@Tag(name = "3. Studio Controller")
+@SecurityRequirement(name = "bearer-key")
 public class StudioController {
     private final StudioService studioService;
 
@@ -28,7 +32,7 @@ public class StudioController {
      */
     @GetMapping("/studios")
     @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_USER')")
-    public ResponseEntity<?> getAllStudios() {
+    public ResponseEntity<?> getAll() {
         return studioService.getAllStudios();
     }
 
@@ -40,7 +44,7 @@ public class StudioController {
      */
     @GetMapping("/studio/{id}")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<?> getStudioById(@PathVariable Integer id) throws ResourceNotFoundException {
+    public ResponseEntity<?> getById(@PathVariable Integer id) throws ResourceNotFoundException {
         return studioService.getStudioById(id);
     }
 
@@ -52,7 +56,7 @@ public class StudioController {
      */
     @PostMapping("/studio/create")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<?> createStudio(StudioRequestDTO studioRequestDTO) throws ResourceAlreadyExistException {
+    public ResponseEntity<?> create(StudioRequestDTO studioRequestDTO) throws ResourceAlreadyExistException {
         return studioService.createStudio(studioRequestDTO);
     }
     
@@ -64,7 +68,7 @@ public class StudioController {
      */
     @PutMapping("/studio/update")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<?> updateStudio(StudioRequestDTO studioRequestDTO) throws ResourceNotFoundException {
+    public ResponseEntity<?> update(StudioRequestDTO studioRequestDTO) throws ResourceNotFoundException {
         return studioService.updateStudio(studioRequestDTO);
     }
     
@@ -76,7 +80,7 @@ public class StudioController {
      */
     @DeleteMapping("/studio/delete/{id}")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<?> deleteStudio(@PathVariable Integer id) throws ResourceNotFoundException {
+    public ResponseEntity<?> delete(@PathVariable Integer id) throws ResourceNotFoundException {
         return studioService.deleteStudio(id);
     }
 }
