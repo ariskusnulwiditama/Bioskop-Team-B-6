@@ -1,21 +1,43 @@
 package TeamB.Bioskop6.util;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 
 @Component
 public class EmailSender {
     @Autowired
-    JavaMailSender emailSender;
+    JavaMailSender javaMailSender;
 
-    public void sendSimpleMessage(String to, String subject, String text) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom("najib.djulfikar@gmail.com");
-        message.setTo(to);
-        message.setSubject(subject);
-        message.setText(text);
-        emailSender.send(message);
+    public void sendOtpMessage(String to, String subject, String otp) throws MessagingException {
+        MimeMessage message = javaMailSender.createMimeMessage();
+        String body = 
+        " <div style='font-family: Helvetica,Arial,sans-serif;min-width:1000px;overflow:auto;line-height:2'>" +
+            "<div style='margin:50px auto;width:70%;padding:20px 0'>"+
+                "<div style='border-bottom:1px solid #eee'>"+
+                    "<a href='' style='font-size:1.4em;color: #00466a;text-decoration:none;font-weight:600'>Bioskop6</a>"+
+                "</div>"+
+                " <p style='font-size:1.1em'>Hi,</p>"+
+                " <p>Thank you for choosing Bioskop6. Use the following OTP to complete your Reset Password procedures. OTP is valid for 5 minutes</p>"+
+                "<h2 style='background: #00466a;margin: 0 auto;width: max-content;padding: 0 10px;color: #fff;border-radius: 4px;'>"+ otp +"</h2>" +
+                "<p style='font-size:0.9em;'>Regards,<br />Bioskop6</p>"+
+                "<hr style='border:none;border-top:1px solid #eee' />"+
+                "<div style='float:right;padding:8px 0;color:#aaa;font-size:0.8em;line-height:1;font-weight:300'>"+
+                    "<p>BIOSKOP6 Inc</p>"+
+                    "<p>1600 Amphitheatre Parkway</p>"+
+                    "<p>Yogyakarta</p>"+
+                "</div>"+
+            "</div>"+
+        "</div>";
+        MimeMessageHelper helper = new MimeMessageHelper(message, true);
+        helper.setFrom("BIOSKOP6");
+        helper.setTo(to);
+        helper.setSubject(subject);
+        helper.setText(body, true);
+        javaMailSender.send(message);
     }
 }

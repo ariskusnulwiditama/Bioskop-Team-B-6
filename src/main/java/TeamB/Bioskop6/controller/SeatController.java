@@ -4,6 +4,8 @@ import TeamB.Bioskop6.helper.ResourceAlreadyExistException;
 import TeamB.Bioskop6.helper.ResourceNotFoundException;
 import TeamB.Bioskop6.dto.SeatRequestDTO;
 import TeamB.Bioskop6.service.SeatService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api")
+@Tag(name = "4. Seat Controller")
+@SecurityRequirement(name = "bearer-key")
 public class SeatController {
     @Autowired
     private final SeatService seatService;

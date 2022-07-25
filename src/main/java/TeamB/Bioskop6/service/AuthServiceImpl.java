@@ -8,7 +8,10 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import javax.mail.MessagingException;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -68,6 +71,12 @@ public class AuthServiceImpl implements AuthService {
     @Autowired
     EmailSender emailSender;
 
+    @Value("${com.app.domain}")
+    String domain;
+
+    @Value("${server.port}")
+    String port;
+
     private final HttpHeaders headers = new HttpHeaders();
 
     @Override
@@ -120,14 +129,14 @@ public class AuthServiceImpl implements AuthService {
             userRepository.save(user);
             return ResponseHandler.generateResponse(null, HttpStatus.OK, headers, ZonedDateTime.now(), new MessageResponse("User registered successfully!"));
         } catch (ResourceAlreadyExistException e) {
-            return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.NOT_ACCEPTABLE, headers, ZonedDateTime.now(), null);
+            return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.BAD_REQUEST, headers, ZonedDateTime.now(), null);
         }catch (RuntimeException e) {
-            return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.NOT_ACCEPTABLE, headers, ZonedDateTime.now(), null);
+            return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.BAD_REQUEST, headers, ZonedDateTime.now(), null);
         } 
     }
     
     @Override
-    public ResponseEntity<?> forgetPassword(ForgetPasswordRequestDTO forgetPasswordRequestDTO) throws ResourceNotFoundException {
+    public ResponseEntity<?> forgetPassword(ForgetPasswordRequestDTO forgetPasswordRequestDTO) throws ResourceNotFoundException, MessagingException {
         headers.set("APP-NAME", "Bioskop6 API KELOMPOK B");
         try {
             if (!userRepository.existsByEmailAddress(forgetPasswordRequestDTO.getEmailAddress())) {
@@ -135,10 +144,13 @@ public class AuthServiceImpl implements AuthService {
             }
             String emailAddress = forgetPasswordRequestDTO.getEmailAddress();
             int otp = otpService.generateOTP(emailAddress);
-            emailSender.sendSimpleMessage(emailAddress, "Reset Password Request", String.valueOf(otp));
+            emailSender.sendOtpMessage(emailAddress, "BIOSKOP6 Reset Password Request", String.valueOf(otp));
             return ResponseHandler.generateResponse(null, HttpStatus.OK, headers, ZonedDateTime.now(), new MessageResponse("OTP has been sent to your email!"));
         } catch (ResourceNotFoundException e) {
             return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.NOT_FOUND, headers, ZonedDateTime.now(), null);
+        } catch (MessagingException e) {
+            return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.BAD_REQUEST, headers, ZonedDateTime.now(), null);
+
         }
     }
     
@@ -153,7 +165,7 @@ public class AuthServiceImpl implements AuthService {
             }
             resetPasswordTokenRepository.deleteByEmailAddress(confirmOTPRequestDTO.getEmailAddress());
             ResetPasswordToken resetPasswordToken = resetPasswordTokenRepository.save(ResetPasswordToken.builder().emailAddress(confirmOTPRequestDTO.getEmailAddress()).build());
-            return ResponseHandler.generateResponse(null, HttpStatus.OK, headers, ZonedDateTime.now(), "localhost:8083/api/auth/reset_password?token=" + resetPasswordToken.getToken().toString());
+            return ResponseHandler.generateResponse(null, HttpStatus.OK, headers, ZonedDateTime.now(), new MessageResponse(domain + ":" + port + "/api/auth/reset_password?token=" + resetPasswordToken.getToken().toString()));
         } catch (ResourceNotFoundException e) {
             return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.NOT_FOUND, headers, ZonedDateTime.now(), null);
         } catch (WrongOTPException e) {
@@ -176,6 +188,7 @@ public class AuthServiceImpl implements AuthService {
             User user = optionalUser.get();
             user.setPassword(encoder.encode(resetPasswordRequestDTO.getNewPassword()));
             userRepository.save(user);
+            resetPasswordTokenRepository.deleteByEmailAddress(resetPasswordToken.get().getEmailAddress());
             return ResponseHandler.generateResponse(null, HttpStatus.OK, headers, ZonedDateTime.now(), new MessageResponse("Password has been reseted!"));
         } catch (PasswordNotMatchException e) {
             return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.NOT_ACCEPTABLE, headers, ZonedDateTime.now(), null);

@@ -2,6 +2,8 @@ package TeamB.Bioskop6.controller;
 
 import TeamB.Bioskop6.dto.ScheduleRequestDTO;
 import TeamB.Bioskop6.service.ScheduleServiceImpl;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +24,8 @@ import lombok.AllArgsConstructor;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api")
+@Tag(name = "5. Schedule Controller")
+@SecurityRequirement(name = "bearer-key")
 public class ScheduleController {
     @Autowired
     ScheduleServiceImpl scheduleService;

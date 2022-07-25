@@ -4,6 +4,8 @@ import TeamB.Bioskop6.helper.ResourceAlreadyExistException;
 import TeamB.Bioskop6.helper.ResourceNotFoundException;
 import TeamB.Bioskop6.dto.FilmRequestDTO;
 import TeamB.Bioskop6.service.FilmServiceImpl;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -11,6 +13,9 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @AllArgsConstructor
+@RequestMapping("/api")
+@Tag(name = "7. Film Controller")
+@SecurityRequirement(name = "bearer-key")
 public class FilmController {
 
     private final FilmServiceImpl filmService;

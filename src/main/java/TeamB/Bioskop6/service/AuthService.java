@@ -3,6 +3,8 @@ package TeamB.Bioskop6.service;
 
 import java.util.UUID;
 
+import javax.mail.MessagingException;
+
 import org.springframework.http.ResponseEntity;
 
 import TeamB.Bioskop6.dto.ConfirmOTPRequestDTO;
@@ -20,7 +22,7 @@ public interface AuthService {
 
     ResponseEntity<?> registerUser(SignupRequest signupRequest) throws ResourceAlreadyExistException;
 
-    ResponseEntity<?> forgetPassword(ForgetPasswordRequestDTO forgetPasswordRequestDTO) throws ResourceNotFoundException;
+    ResponseEntity<?> forgetPassword(ForgetPasswordRequestDTO forgetPasswordRequestDTO) throws ResourceNotFoundException, MessagingException;
 
     ResponseEntity<?> confirmOTP(ConfirmOTPRequestDTO confirmOTPRequestDTO) throws WrongOTPException, ResourceNotFoundException;
 

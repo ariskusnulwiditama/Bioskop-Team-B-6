@@ -4,6 +4,8 @@ import TeamB.Bioskop6.helper.ResourceAlreadyExistException;
 import TeamB.Bioskop6.helper.ResourceNotFoundException;
 import TeamB.Bioskop6.dto.ReservationRequestDTO;
 import TeamB.Bioskop6.service.ReservationsServiceImpl;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +16,10 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @AllArgsConstructor
-public class ReservationsController {
+@RequestMapping("/api")
+@Tag(name = "6. Reservation Controller")
+@SecurityRequirement(name = "bearer-key")
+public class ReservationController {
     @Autowired
     ReservationsServiceImpl reservationService;
 

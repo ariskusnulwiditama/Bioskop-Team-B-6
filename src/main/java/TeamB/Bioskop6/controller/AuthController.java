@@ -2,6 +2,7 @@ package TeamB.Bioskop6.controller;
 
 import java.util.UUID;
 
+import javax.mail.MessagingException;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,10 +24,12 @@ import TeamB.Bioskop6.helper.ResourceAlreadyExistException;
 import TeamB.Bioskop6.helper.ResourceNotFoundException;
 import TeamB.Bioskop6.helper.WrongOTPException;
 import TeamB.Bioskop6.service.AuthServiceImpl;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/auth")
+@Tag(name = "1. Auth Controller")
 public class AuthController {
     @Autowired
     AuthServiceImpl authServiceImpl;
@@ -57,9 +60,10 @@ public class AuthController {
      * @param forgetPasswordRequestDTO
      * @return
      * @throws ResourceNotFoundException
+     * @throws MessagingException
      */
     @PostMapping("/forget_password")
-    public ResponseEntity<?> forgetPassword(@Valid @RequestBody ForgetPasswordRequestDTO forgetPasswordRequestDTO) throws ResourceNotFoundException {
+    public ResponseEntity<?> forgetPassword(@Valid @RequestBody ForgetPasswordRequestDTO forgetPasswordRequestDTO) throws ResourceNotFoundException, MessagingException {
         return authServiceImpl.forgetPassword(forgetPasswordRequestDTO);
     }
 

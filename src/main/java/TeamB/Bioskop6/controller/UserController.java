@@ -14,11 +14,15 @@ import TeamB.Bioskop6.dto.UserRequestDTO;
 import TeamB.Bioskop6.helper.ResourceAlreadyExistException;
 import TeamB.Bioskop6.helper.ResourceNotFoundException;
 import TeamB.Bioskop6.service.UserService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api")
+@Tag(name = "2. User Controller")
+@SecurityRequirement(name = "bearer-key")
 public class UserController {
     
     private final UserService userService;

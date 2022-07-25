@@ -14,11 +14,15 @@ import TeamB.Bioskop6.dto.StudioRequestDTO;
 import TeamB.Bioskop6.helper.ResourceAlreadyExistException;
 import TeamB.Bioskop6.helper.ResourceNotFoundException;
 import TeamB.Bioskop6.service.StudioService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api")
+@Tag(name = "3. Studio Controller")
+@SecurityRequirement(name = "bearer-key")
 public class StudioController {
     private final StudioService studioService;
 

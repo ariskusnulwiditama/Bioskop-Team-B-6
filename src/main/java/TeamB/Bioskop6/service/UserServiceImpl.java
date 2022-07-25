@@ -21,7 +21,7 @@ import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
-public class UserServiceImp implements UserService {
+public class UserServiceImpl implements UserService {
     @Autowired
     UserRepository userRepository;
 
