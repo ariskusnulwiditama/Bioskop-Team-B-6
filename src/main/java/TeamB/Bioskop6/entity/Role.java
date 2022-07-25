@@ -10,6 +10,7 @@ import javax.persistence.Table;
 
 import TeamB.Bioskop6.constant.ERole;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,6 +20,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
+@Builder
 @Table(name = "role")
 public class Role {
     @Id
