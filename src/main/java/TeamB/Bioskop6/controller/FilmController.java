@@ -4,6 +4,8 @@ import TeamB.Bioskop6.helper.ResourceAlreadyExistException;
 import TeamB.Bioskop6.helper.ResourceNotFoundException;
 import TeamB.Bioskop6.dto.FilmRequestDTO;
 import TeamB.Bioskop6.service.FilmServiceImpl;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -11,6 +13,9 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @AllArgsConstructor
+@RequestMapping("/api")
+@Tag(name = "7. Film Controller")
+@SecurityRequirement(name = "bearer-key")
 public class FilmController {
 
     private final FilmServiceImpl filmService;
@@ -21,7 +26,7 @@ public class FilmController {
      */
     @GetMapping("/film")
     @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_USER')")
-    public ResponseEntity<?> getAllfilm() {
+    public ResponseEntity<?> getAll() {
         return filmService.getAllFilm();
     }
 
@@ -33,7 +38,7 @@ public class FilmController {
      */
     @GetMapping("/film/{id}")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<?> getFilmById(@PathVariable Integer id) throws ResourceNotFoundException {
+    public ResponseEntity<?> getById(@PathVariable Integer id) throws ResourceNotFoundException {
         return filmService.getFilmById(id);
     }
 
@@ -45,7 +50,7 @@ public class FilmController {
      */
     @PostMapping("/film/create")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<?> createfilm(FilmRequestDTO filmRequestDTO) throws ResourceAlreadyExistException {
+    public ResponseEntity<?> create(FilmRequestDTO filmRequestDTO) throws ResourceAlreadyExistException {
         return filmService.createFilm(filmRequestDTO);
     }
 
@@ -57,7 +62,7 @@ public class FilmController {
      */
     @PutMapping("/film/update")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<?> updateUser(FilmRequestDTO filmRequestDTO) throws ResourceNotFoundException {
+    public ResponseEntity<?> update(FilmRequestDTO filmRequestDTO) throws ResourceNotFoundException {
         return filmService.updateFilm(filmRequestDTO);
     }
 
@@ -69,7 +74,7 @@ public class FilmController {
      */
     @DeleteMapping("/film/delete/{id}")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<?> deleteFilm(@PathVariable Integer id) throws ResourceNotFoundException {
+    public ResponseEntity<?> delete(@PathVariable Integer id) throws ResourceNotFoundException {
         return filmService.deleteFilm(id);
     }
 }

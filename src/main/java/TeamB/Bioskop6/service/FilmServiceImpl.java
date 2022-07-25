@@ -8,9 +8,9 @@ import TeamB.Bioskop6.dto.FilmResponseDTO;
 import TeamB.Bioskop6.entity.Film;
 import TeamB.Bioskop6.handler.ResponseHandler;
 import TeamB.Bioskop6.repository.FilmRepository;
-import lombok.AllArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,18 +20,22 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-
 @Service
-@AllArgsConstructor
 public class FilmServiceImpl implements FilmService {
     @Autowired
     FilmRepository filmRepository;
 
-    HttpHeaders headers = new HttpHeaders();
+    @Value("${com.app.name}")
+    String projectName;
+
+    @Value("${com.app.team}")
+    String projectTeam;
+
+    private final HttpHeaders headers = new HttpHeaders();
 
     @Override
     public ResponseEntity<?> getAllFilm() {
-        headers.set("APP-NAME", "Bioskop6 API KELOMPOK B");
+        headers.set("APP-NAME", projectName + "-API " + projectTeam);
         try {
             List<Film> filmList = filmRepository.findAll();
             List<FilmResponseDTO> filmResponseDTOS = new ArrayList<>();
@@ -46,7 +50,7 @@ public class FilmServiceImpl implements FilmService {
 
     @Override
     public ResponseEntity<?> getFilmById(Integer code) throws ResourceNotFoundException {
-        headers.set("APP-NAME", "Bioskop6 API KELOMPOK B");
+        headers.set("APP-NAME", projectName + "-API " + projectTeam);
         try {
             Film film = filmRepository.findById(code).orElseThrow(() -> new ResourceNotFoundException("Film with Code " + code + " is not available!"));
             FilmResponseDTO filmResponseDTO = film.convertToResponse();
@@ -58,7 +62,7 @@ public class FilmServiceImpl implements FilmService {
 
     @Override
     public ResponseEntity<?> createFilm(FilmRequestDTO filmRequestDTO) throws ResourceAlreadyExistException {
-        headers.set("APP-NAME", "Bioskop6 API KELOMPOK B");
+        headers.set("APP-NAME", projectName + "-API " + projectTeam);
         try {
             Film film = filmRequestDTO.convertToEntity();
             filmRepository.findById(film.getFilmCode()).orElseThrow(() -> new ResourceAlreadyExistException("Film with Code " + film.getFilmCode() + " is already exists!"));
@@ -71,7 +75,7 @@ public class FilmServiceImpl implements FilmService {
 
     @Override
     public ResponseEntity<?> updateFilm(FilmRequestDTO filmRequestDTO) throws ResourceNotFoundException {
-        headers.set("APP-NAME", "Bioskop6 API KELOMPOK B");
+        headers.set("APP-NAME", projectName + "-API " + projectTeam);
         try {
             Film film = filmRequestDTO.convertToEntity();
             filmRepository.findById(film.getFilmCode()).orElseThrow(() -> new ResourceNotFoundException("Film with Code " + film.getFilmCode() + " is not available!"));
@@ -84,7 +88,7 @@ public class FilmServiceImpl implements FilmService {
 
     @Override
     public ResponseEntity<?> deleteFilm(Integer id) throws ResourceNotFoundException {
-        headers.set("APP-NAME", "Bioskop6 API KELOMPOK B");
+        headers.set("APP-NAME", projectName + "-API " + projectTeam);
         try {
             Film film = filmRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Film with ID " + id + " is not available!"));
             filmRepository.delete(film);

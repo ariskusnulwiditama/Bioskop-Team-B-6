@@ -29,7 +29,7 @@ CREATE TABLE public.studio (
   CONSTRAINT studio_pkey PRIMARY KEY (studio_id)
 );
 
-CREATE TABLE "film" (
+CREATE TABLE public.film (
   film_code int4,
   film_name varchar(100) NOT NULL,
   genre varchar(20) NOT NULL,

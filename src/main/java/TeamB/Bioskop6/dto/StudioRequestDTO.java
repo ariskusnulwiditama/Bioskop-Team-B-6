@@ -1,5 +1,6 @@
 package TeamB.Bioskop6.dto;
 
+import TeamB.Bioskop6.constant.EStudioType;
 import TeamB.Bioskop6.entity.Studio;
 import lombok.*;
 
@@ -13,7 +14,7 @@ public class StudioRequestDTO {
 
     private String studioName;
 
-    private String type;
+    private EStudioType type;
 
     private String capacity;
 
