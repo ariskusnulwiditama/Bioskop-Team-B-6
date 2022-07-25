@@ -4,6 +4,8 @@ import TeamB.Bioskop6.helper.ResourceAlreadyExistException;
 import TeamB.Bioskop6.helper.ResourceNotFoundException;
 import TeamB.Bioskop6.dto.SeatRequestDTO;
 import TeamB.Bioskop6.service.SeatServiceImpl;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -71,7 +73,6 @@ public class SeatController {
      * @param id
      * @return
      * @throws ResourceNotFoundException
-     * @throws DataNotFoundException
      */
     @DeleteMapping("/seat/{id}")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
