@@ -26,6 +26,11 @@ public class SeatController {
     @Autowired
     private final SeatServiceImpl seatServiceImpl;
 
+    /***
+     * Get All data from seat table into list
+     * @return ResponseEntity<Object>
+     * @throws ResourceNotFoundException
+     */
     @GetMapping("/seats")
     @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_USER')")
     public ResponseEntity<Object> getAllSeats() {
@@ -43,7 +48,13 @@ public class SeatController {
         }
     }
 
+    /***
+     * Get a data from seat table by its ID
+     * @return ResponseEntity<Object>
+     * @throws ResourceNotFoundException
+     */
     @PostMapping("/seats")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Object> createSeat(@RequestBody SeatRequestDTO seatRequestDTO) throws ResourceNotFoundException {
         HttpHeaders headers = new HttpHeaders();
         headers.set("APP-NAME", "Bioskop API B");
@@ -58,6 +69,11 @@ public class SeatController {
 
     }
 
+    /***
+     * Update a data from seat table by its ID
+     * @return ResponseEntity<Object>
+     * @throws ResourceNotFoundException
+     */
     @GetMapping("/seat/{id}")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Object> getOneSeat(@PathVariable Integer id) throws ResourceNotFoundException, DataNotFoundException {
@@ -72,6 +88,11 @@ public class SeatController {
         }
     }
 
+    /***
+     * Update a data from seat table by its ID
+     * @return ResponseEntity<Object>
+     * @throws ResourceNotFoundException
+     */
     @PostMapping("/seat/{id}")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Object> updateSeatById(@PathVariable Integer id, @RequestBody SeatRequestDTO seatRequestDTO) throws ResourceNotFoundException, DataNotFoundException {
@@ -87,6 +108,11 @@ public class SeatController {
 
     }
 
+    /***
+     * Delete a data from seat table by its ID
+     * @return ResponseEntity<Object>
+     * @throws ResourceNotFoundException
+     */
     @DeleteMapping("/seat/{id}")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Object> deleteSeatById(@PathVariable Integer id) throws ResourceNotFoundException, DataNotFoundException {
