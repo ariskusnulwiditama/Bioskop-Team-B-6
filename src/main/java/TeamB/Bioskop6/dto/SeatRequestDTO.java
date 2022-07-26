@@ -1,9 +1,15 @@
 package TeamB.Bioskop6.dto;
 
 import TeamB.Bioskop6.entity.Seat;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+@Builder
 public class SeatRequestDTO {
     private Integer seatId;
     private Character seatCol;

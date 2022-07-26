@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,19 +18,23 @@ import TeamB.Bioskop6.handler.ResponseHandler;
 import TeamB.Bioskop6.helper.ResourceAlreadyExistException;
 import TeamB.Bioskop6.helper.ResourceNotFoundException;
 import TeamB.Bioskop6.repository.StudioRepository;
-import lombok.AllArgsConstructor;
 
-@AllArgsConstructor
 @Service
 public class StudioServiceImpl implements StudioService {
     @Autowired
     StudioRepository studioRepository;
     
-    HttpHeaders headers = new HttpHeaders();
+    private final HttpHeaders headers = new HttpHeaders();
+
+    @Value("${com.app.name}")
+    String projectName;
+
+    @Value("${com.app.team}")
+    String projectTeam;
     
     @Override
     public ResponseEntity<?> getAllStudios() {
-        headers.set("APP-NAME", "Bioskop6 API KELOMPOK B");
+        headers.set("APP-NAME", projectName + "-API " + projectTeam);
         try {
             List<Studio> studioList = studioRepository.findAll();
             List<StudioResponseDTO> studioResponseDTOs = new ArrayList<>();
@@ -44,7 +49,7 @@ public class StudioServiceImpl implements StudioService {
 
     @Override
     public ResponseEntity<?> getStudioById(Integer id) throws ResourceNotFoundException {
-        headers.set("APP-NAME", "Bioskop6 API KELOMPOK B");
+        headers.set("APP-NAME", projectName + "-API " + projectTeam);
         try {
             Studio studio = studioRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Studio with ID "+ id + " is not available!"));
             StudioResponseDTO studioResponseDTO = studio.convertToResponse();
@@ -56,7 +61,7 @@ public class StudioServiceImpl implements StudioService {
 
     @Override
     public ResponseEntity<?> createStudio(StudioRequestDTO studioRequestDTO) throws ResourceAlreadyExistException {
-        headers.set("APP-NAME", "Bioskop6 API KELOMPOK B");
+        headers.set("APP-NAME", projectName + "-API " + projectTeam);
         try {
             Studio studio = studioRequestDTO.convertToEntity();
             studioRepository.findById(studio.getStudioId()).orElseThrow(() -> new ResourceAlreadyExistException("Studio with ID " + studio.getStudioId() + " is already exists!"));
@@ -69,7 +74,7 @@ public class StudioServiceImpl implements StudioService {
 
     @Override
     public ResponseEntity<?> updateStudio(StudioRequestDTO studioRequestDTO) throws ResourceNotFoundException {
-        headers.set("APP-NAME", "Bioskop6 API KELOMPOK B");
+        headers.set("APP-NAME", projectName + "-API " + projectTeam);
         try {
             Studio studio = studioRequestDTO.convertToEntity();
             studioRepository.findById(studio.getStudioId()).orElseThrow(() -> new ResourceNotFoundException("Studio with ID "+ studio.getStudioId() + " is not available!"));
@@ -82,7 +87,7 @@ public class StudioServiceImpl implements StudioService {
 
     @Override
     public ResponseEntity<?> deleteStudio(Integer id) throws ResourceNotFoundException {
-        headers.set("APP-NAME", "Bioskop6 API KELOMPOK B");
+        headers.set("APP-NAME", projectName + "-API " + projectTeam);
         try {
             Studio studio = studioRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Studio with ID " + id + " is not available!"));
             studioRepository.delete(studio);

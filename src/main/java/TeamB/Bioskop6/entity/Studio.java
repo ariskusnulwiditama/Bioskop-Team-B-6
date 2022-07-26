@@ -3,6 +3,8 @@ package TeamB.Bioskop6.entity;
 import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -10,6 +12,7 @@ import javax.persistence.Id;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import TeamB.Bioskop6.constant.EStudioType;
 import TeamB.Bioskop6.dto.StudioResponseDTO;
 import lombok.*;
 
@@ -26,7 +29,8 @@ public class Studio {
 
     private String studioName;
 
-    private String type;
+    @Enumerated(EnumType.STRING)
+    private EStudioType type;
 
     private String capacity;
 

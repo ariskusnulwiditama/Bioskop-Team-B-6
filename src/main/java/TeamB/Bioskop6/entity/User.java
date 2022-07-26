@@ -3,6 +3,7 @@ package TeamB.Bioskop6.entity;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.persistence.*;
 
@@ -53,15 +54,17 @@ public class User {
         this.password = password;
     }
 
+    
     public UserResponseDTO convertToResponse(){
         return UserResponseDTO.builder()
-            .userId(userId)
-            .firstName(firstName)
-            .lastName(lastName)
-            .username(username)
-            .emailAddress(emailAddress)
-            .createdAt(createdAt)
-            .updatedAt(updatedAt)
+            .userId(this.userId)
+            .firstName(this.firstName)
+            .lastName(this.lastName)
+            .username(this.username)
+            .emailAddress(this.emailAddress)
+            .roles(this.roles.stream().map(role -> role.getName().toString()).collect(Collectors.toList()))
+            .createdAt(this.createdAt)
+            .updatedAt(this.updatedAt)
             .build();
     } 
 }

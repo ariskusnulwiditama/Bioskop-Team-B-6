@@ -2,6 +2,8 @@ package TeamB.Bioskop6.controller;
 
 import TeamB.Bioskop6.dto.ScheduleRequestDTO;
 import TeamB.Bioskop6.service.ScheduleServiceImpl;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +24,8 @@ import lombok.AllArgsConstructor;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api")
+@Tag(name = "5. Schedule Controller")
+@SecurityRequirement(name = "bearer-key")
 public class ScheduleController {
     @Autowired
     ScheduleServiceImpl scheduleService;
@@ -32,7 +36,7 @@ public class ScheduleController {
      */
     @GetMapping("/schedule")
     @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_USER')")
-    public ResponseEntity<?> getAllSchedule() {
+    public ResponseEntity<?> getAll() {
         return scheduleService.getAllSchedule();
     }
 
@@ -44,7 +48,7 @@ public class ScheduleController {
      */
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @GetMapping("/schedule/{id}")
-    public ResponseEntity<?> getScheduleById(@PathVariable Integer id) throws ResourceNotFoundException {
+    public ResponseEntity<?> getById(@PathVariable Integer id) throws ResourceNotFoundException {
         return scheduleService.getScheduleById(id);
     }
 
@@ -56,7 +60,7 @@ public class ScheduleController {
      */
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @PostMapping("/schedule/create")
-    public ResponseEntity<?> createSchedule(ScheduleRequestDTO scheduleRequestDTO) throws ResourceAlreadyExistException {
+    public ResponseEntity<?> create(ScheduleRequestDTO scheduleRequestDTO) throws ResourceAlreadyExistException {
         return scheduleService.createSchedule(scheduleRequestDTO);
     }
 
@@ -68,7 +72,7 @@ public class ScheduleController {
      */
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @PutMapping("/schedule/update")
-    public ResponseEntity<?> updateSchedule(ScheduleRequestDTO scheduleRequestDTO) throws ResourceNotFoundException {
+    public ResponseEntity<?> update(ScheduleRequestDTO scheduleRequestDTO) throws ResourceNotFoundException {
         return scheduleService.updateSchedule(scheduleRequestDTO);
     }
 
@@ -80,7 +84,7 @@ public class ScheduleController {
      */
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @DeleteMapping("/schedule/delete/{id}")
-    public ResponseEntity<?> deleteSchedule(@PathVariable Integer id) throws ResourceNotFoundException {
+    public ResponseEntity<?> delete(@PathVariable Integer id) throws ResourceNotFoundException {
         return scheduleService.deleteSchedule(id);
     }
 }

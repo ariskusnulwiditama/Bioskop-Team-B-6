@@ -7,32 +7,34 @@ import TeamB.Bioskop6.dto.ReservationRequestDTO;
 import TeamB.Bioskop6.dto.ReservationResponseDTO;
 import TeamB.Bioskop6.entity.Reservation;
 import TeamB.Bioskop6.handler.ResponseHandler;
-import lombok.AllArgsConstructor;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
-@AllArgsConstructor
 public class ReservationsServiceImpl implements ReservationsService {
     @Autowired
     ReservationsRepository reservationRepository;
 
-    @Autowired
-    ReservationRequestDTO reservationRequestDTO;
-    
-    HttpHeaders headers = new HttpHeaders();
+    private final HttpHeaders headers = new HttpHeaders();
+
+    @Value("${com.app.name}")
+    String projectName;
+
+    @Value("${com.app.team}")
+    String projectTeam;
 
     @Override
     public ResponseEntity<?> getAllReservation() {
-        headers.set("APP-NAME", "Bioskop6 API KELOMPOK B");
+        headers.set("APP-NAME", projectName + "-API " + projectTeam);
         try {
             List<Reservation> reservationsList = reservationRepository.findAll();
             List<ReservationResponseDTO> reservationResponseDTOS = new ArrayList<>();
@@ -47,7 +49,7 @@ public class ReservationsServiceImpl implements ReservationsService {
 
     @Override
     public ResponseEntity<?> getReservationById(Integer id) throws ResourceNotFoundException {
-        headers.set("APP-NAME", "Bioskop6 API KELOMPOK B");
+        headers.set("APP-NAME", projectName + "-API " + projectTeam);
         try {
             Reservation reservation = reservationRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User with ID " + id + " is not available!"));
             ReservationResponseDTO reservationResponseDTO = reservation.convertToResponse();
@@ -59,7 +61,7 @@ public class ReservationsServiceImpl implements ReservationsService {
 
     @Override
     public ResponseEntity<?> createReservation(ReservationRequestDTO reservationRequestDTO) throws ResourceAlreadyExistException {
-        headers.set("APP-NAME", "Bioskop6 API KELOMPOK B");
+        headers.set("APP-NAME", projectName + "-API " + projectTeam);
         try {
             Reservation reservation = reservationRequestDTO.convertToEntity();
             reservationRepository.findById(reservation.getReservationId()).orElseThrow(() -> new ResourceAlreadyExistException("User with ID " + reservation.getReservationId() + " is already exist!"));
@@ -72,7 +74,7 @@ public class ReservationsServiceImpl implements ReservationsService {
 
     @Override
     public ResponseEntity<?> updateReservation(ReservationRequestDTO reservationRequestDTO) throws ResourceNotFoundException {
-        headers.set("APP-NAME", "Bioskop6 API KELOMPOK B");
+        headers.set("APP-NAME", projectName + "-API " + projectTeam);
         try {
             Reservation reservation = reservationRequestDTO.convertToEntity();
             reservationRepository.findById(reservation.getReservationId()).orElseThrow(() -> new ResourceNotFoundException("User with ID " + reservation.getReservationId() + " is not available!"));
@@ -85,7 +87,7 @@ public class ReservationsServiceImpl implements ReservationsService {
 
     @Override
     public ResponseEntity<?> deleteReservation(Integer id) throws ResourceNotFoundException {
-        headers.set("APP-NAME", "Bioskop6 API KELOMPOK B");
+        headers.set("APP-NAME", projectName + "-API " + projectTeam);
         try {
             Reservation reservation = reservationRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User with ID " + id + " is not available!"));
             reservationRepository.delete(reservation);
