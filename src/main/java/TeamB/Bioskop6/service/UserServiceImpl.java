@@ -20,7 +20,6 @@ import TeamB.Bioskop6.dto.UserResponseDTO;
 import TeamB.Bioskop6.entity.User;
 import TeamB.Bioskop6.entity.UserDetailsImpl;
 import TeamB.Bioskop6.handler.ResponseHandler;
-import TeamB.Bioskop6.helper.ResourceAlreadyExistException;
 import TeamB.Bioskop6.helper.ResourceNotFoundException;
 import TeamB.Bioskop6.repository.UserRepository;
 
@@ -68,22 +67,6 @@ public class UserServiceImpl implements UserService {
             return ResponseHandler.generateResponse(null, HttpStatus.OK, headers, ZonedDateTime.now(), userResponseDTO);
         } catch (ResourceNotFoundException e) {
             return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.NOT_FOUND, headers, ZonedDateTime.now(), null);
-        }
-    }
-
-    @Override
-    public ResponseEntity<?> createUser(UserRequestDTO userRequestDTO) throws ResourceAlreadyExistException {
-        headers.set("APP-NAME", projectName + "-API " + projectTeam);
-        try {
-            User user = userRequestDTO.convertToEntity();
-            userRepository.findById(user.getUserId()).orElseThrow(() -> new ResourceAlreadyExistException("User with ID " + user.getUserId() + " is already exist!"));
-            User newUser = this.userRepository.save(user);
-            logger.info("--------------------------");
-            logger.info("Create User " + user);
-            logger.info("--------------------------");
-            return ResponseHandler.generateResponse("User with ID " + newUser.getUserId() + " successfully created!", HttpStatus.CREATED, headers, ZonedDateTime.now(), newUser);
-        } catch (ResourceAlreadyExistException e) {
-            return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.NOT_ACCEPTABLE, headers, ZonedDateTime.now(), null);
         }
     }
 

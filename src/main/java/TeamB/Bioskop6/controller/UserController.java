@@ -5,13 +5,11 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import TeamB.Bioskop6.dto.UserRequestDTO;
-import TeamB.Bioskop6.helper.ResourceAlreadyExistException;
 import TeamB.Bioskop6.helper.ResourceNotFoundException;
 import TeamB.Bioskop6.service.UserService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -49,18 +47,6 @@ public class UserController {
         return userService.getUserById(id);
     }
 
-    /***
-     * Create a new data in user table
-     * @param userRequestDTO
-     * @return
-     * @throws ResourceAlreadyExistException
-     */
-    @PostMapping("/user/create")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<?> create(UserRequestDTO userRequestDTO) throws ResourceAlreadyExistException {
-        return userService.createUser(userRequestDTO);
-    }
-    
     /***
      * Update existing data in user table
      * @param userRequestDTO
