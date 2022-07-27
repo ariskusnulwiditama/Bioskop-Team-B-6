@@ -1,10 +1,13 @@
 package TeamB.Bioskop6.controller;
 
 import TeamB.Bioskop6.dto.ScheduleRequestDTO;
+import TeamB.Bioskop6.service.ReportPDFImpl;
 import TeamB.Bioskop6.service.ScheduleServiceImpl;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperPrint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -21,6 +24,8 @@ import TeamB.Bioskop6.helper.ResourceNotFoundException;
 
 import lombok.AllArgsConstructor;
 
+import javax.servlet.http.HttpServletResponse;
+
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api")
@@ -29,6 +34,8 @@ import lombok.AllArgsConstructor;
 public class ScheduleController {
     @Autowired
     ScheduleServiceImpl scheduleService;
+    private HttpServletResponse response;
+    private ReportPDFImpl reportReservation;
 
     /***
      * Get All data from schedule table into list
@@ -86,5 +93,21 @@ public class ScheduleController {
     @DeleteMapping("/schedule/delete/{id}")
     public ResponseEntity<?> delete(@PathVariable Integer id) throws ResourceNotFoundException {
         return scheduleService.deleteSchedule(id);
+    }
+
+    /***
+     * print report of schedule table
+     * @return void
+     * @throws Exception
+     */
+    @GetMapping("/seats/print")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    public void printReport() throws Exception {
+        response.setContentType("application/pdf");
+        response.setHeader("Content-Disposition", "inline; filename=\"report.pdf\"");
+        JasperPrint jasperPrint = this.reportReservation.generateJasperPrint();
+        JasperExportManager.exportReportToPdfStream(jasperPrint, response.getOutputStream());
+        response.getOutputStream().flush();
+        response.getOutputStream().close();
     }
 }

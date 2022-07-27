@@ -3,14 +3,19 @@ package TeamB.Bioskop6.controller;
 import TeamB.Bioskop6.helper.ResourceAlreadyExistException;
 import TeamB.Bioskop6.helper.ResourceNotFoundException;
 import TeamB.Bioskop6.dto.SeatRequestDTO;
-import TeamB.Bioskop6.service.SeatService;
+import TeamB.Bioskop6.service.ReportPDFImpl;
+import TeamB.Bioskop6.service.SeatServiceImpl;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperPrint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
 
 @RestController
 @AllArgsConstructor
@@ -19,7 +24,9 @@ import org.springframework.web.bind.annotation.*;
 @SecurityRequirement(name = "bearer-key")
 public class SeatController {
     @Autowired
-    private final SeatService seatService;
+    private final SeatServiceImpl seatService;
+    private HttpServletResponse response;
+    private ReportPDFImpl reportReservation;
 
     /***
      * Get All data from seat table into list
@@ -73,11 +80,26 @@ public class SeatController {
      * @param id
      * @return
      * @throws ResourceNotFoundException
-     * @throws DataNotFoundException
      */
     @DeleteMapping("/seat/{id}")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<?> delete(@PathVariable Integer id) throws ResourceNotFoundException {
         return seatService.deleteSeat(id);
+    }
+
+    /***
+     * print report of seats table
+     * @return void
+     * @throws Exception
+     */
+    @GetMapping("/seats/print")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    public void printReport() throws Exception {
+        response.setContentType("application/pdf");
+        response.setHeader("Content-Disposition", "inline; filename=\"report.pdf\"");
+        JasperPrint jasperPrint = this.reportReservation.generateJasperPrint();
+        JasperExportManager.exportReportToPdfStream(jasperPrint, response.getOutputStream());
+        response.getOutputStream().flush();
+        response.getOutputStream().close();
     }
 }
