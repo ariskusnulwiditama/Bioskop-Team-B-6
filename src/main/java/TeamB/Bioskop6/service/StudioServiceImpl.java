@@ -4,7 +4,6 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import TeamB.Bioskop6.controller.SeatController;
 import TeamB.Bioskop6.controller.StudioController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

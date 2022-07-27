@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 import javax.mail.MessagingException;
 
 import TeamB.Bioskop6.controller.AuthController;
-import TeamB.Bioskop6.controller.FilmController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,6 +1,5 @@
 package TeamB.Bioskop6.service;
 
-import TeamB.Bioskop6.controller.ScheduleController;
 import TeamB.Bioskop6.controller.SeatController;
 import TeamB.Bioskop6.helper.ResourceAlreadyExistException;
 import TeamB.Bioskop6.helper.ResourceNotFoundException;
