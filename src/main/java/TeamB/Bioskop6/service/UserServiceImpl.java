@@ -9,11 +9,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import TeamB.Bioskop6.dto.UserRequestDTO;
 import TeamB.Bioskop6.dto.UserResponseDTO;
 import TeamB.Bioskop6.entity.User;
+import TeamB.Bioskop6.entity.UserDetailsImpl;
 import TeamB.Bioskop6.handler.ResponseHandler;
 import TeamB.Bioskop6.helper.ResourceAlreadyExistException;
 import TeamB.Bioskop6.helper.ResourceNotFoundException;
@@ -96,5 +98,11 @@ public class UserServiceImpl implements UserService {
         } catch (Exception e) {
             return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.NOT_FOUND, headers, ZonedDateTime.now(), null);
         }
+    }
+
+    @Override
+    public ResponseEntity<?> getLoggedUser() {
+        UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return ResponseHandler.generateResponse(null, HttpStatus.OK, headers, ZonedDateTime.now(), userDetails);
     }
 }

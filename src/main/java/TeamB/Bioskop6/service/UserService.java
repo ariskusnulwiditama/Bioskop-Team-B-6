@@ -16,4 +16,6 @@ public interface UserService {
     ResponseEntity<?> updateUser(UserRequestDTO userRequestDTO) throws ResourceNotFoundException;
 
     ResponseEntity<?> deleteUser(Integer id) throws ResourceNotFoundException;
+
+    ResponseEntity<?> getLoggedUser();
 }
