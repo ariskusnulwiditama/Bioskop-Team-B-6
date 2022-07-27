@@ -30,6 +30,7 @@ public class UserServiceImpl implements UserService {
 
     private final HttpHeaders headers = new HttpHeaders();
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+    private static final String loggerLine = "---------------------------------------";
 
     @Value("${com.app.name}")
     String projectName;
@@ -46,11 +47,14 @@ public class UserServiceImpl implements UserService {
             for (User user : userList){
                 userResponseDTOs.add(user.convertToResponse());
             }
-            logger.info("--------------------------");
+            logger.info(loggerLine);
             logger.info("Get All User Data " + userList);
-            logger.info("--------------------------");
+            logger.info(loggerLine);
             return ResponseHandler.generateResponse(null, HttpStatus.OK, headers, ZonedDateTime.now(), userResponseDTOs);
         } catch (Exception e) {
+            logger.error(loggerLine);
+            logger.error(e.getMessage());
+            logger.error(loggerLine);
             return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.MULTI_STATUS, headers, ZonedDateTime.now(), null);
         }
     }
@@ -61,11 +65,14 @@ public class UserServiceImpl implements UserService {
         try {
             User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User with ID " + id + " is not available!"));
             UserResponseDTO userResponseDTO = user.convertToResponse();
-            logger.info("--------------------------");
+            logger.info(loggerLine);
             logger.info("Get All User Data By ID " + user);
-            logger.info("--------------------------");
+            logger.info(loggerLine);
             return ResponseHandler.generateResponse(null, HttpStatus.OK, headers, ZonedDateTime.now(), userResponseDTO);
         } catch (ResourceNotFoundException e) {
+            logger.error(loggerLine);
+            logger.error(e.getMessage());
+            logger.error(loggerLine);
             return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.NOT_FOUND, headers, ZonedDateTime.now(), null);
         }
     }
@@ -77,11 +84,14 @@ public class UserServiceImpl implements UserService {
             User user = userRequestDTO.convertToEntity();
             userRepository.findById(user.getUserId()).orElseThrow(() -> new ResourceAlreadyExistException("User with ID " + user.getUserId() + " is already exist!"));
             User newUser = this.userRepository.save(user);
-            logger.info("--------------------------");
+            logger.info(loggerLine);
             logger.info("Create User " + user);
-            logger.info("--------------------------");
+            logger.info(loggerLine);
             return ResponseHandler.generateResponse("User with ID " + newUser.getUserId() + " successfully created!", HttpStatus.CREATED, headers, ZonedDateTime.now(), newUser);
         } catch (ResourceAlreadyExistException e) {
+            logger.error(loggerLine);
+            logger.error(e.getMessage());
+            logger.error(loggerLine);
             return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.NOT_ACCEPTABLE, headers, ZonedDateTime.now(), null);
         }
     }
@@ -93,11 +103,14 @@ public class UserServiceImpl implements UserService {
             User user = userRequestDTO.convertToEntity();
             userRepository.findById(user.getUserId()).orElseThrow(() -> new ResourceNotFoundException("User with ID " + user.getUserId() + " is not available!"));
             User updatedUser = userRepository.save(user);
-            logger.info("--------------------------");
+            logger.info(loggerLine);
             logger.info("Update User " + user);
-            logger.info("--------------------------");
+            logger.info(loggerLine);
             return ResponseHandler.generateResponse("User with ID " + updatedUser.getUserId() + " successfully updated!", HttpStatus.OK, headers, ZonedDateTime.now(), updatedUser);
         } catch (ResourceNotFoundException e) {
+            logger.error(loggerLine);
+            logger.error(e.getMessage());
+            logger.error(loggerLine);
             return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.NOT_FOUND, headers, ZonedDateTime.now(), null);
         }
     }
@@ -109,11 +122,14 @@ public class UserServiceImpl implements UserService {
         try {
             User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User with ID " + id + " is not available!"));
             userRepository.delete(user);
-            logger.info("--------------------------");
+            logger.info(loggerLine);
             logger.info("Delete User " + user);
-            logger.info("--------------------------");
+            logger.info(loggerLine);
             return ResponseHandler.generateResponse("User with ID " + id + " successfully deleted!", HttpStatus.OK, headers, ZonedDateTime.now(), null);
         } catch (Exception e) {
+            logger.error(loggerLine);
+            logger.error(e.getMessage());
+            logger.error(loggerLine);
             return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.NOT_FOUND, headers, ZonedDateTime.now(), null);
         }
     }

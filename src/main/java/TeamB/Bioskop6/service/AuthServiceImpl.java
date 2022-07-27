@@ -89,6 +89,7 @@ public class AuthServiceImpl implements AuthService {
 
     private final HttpHeaders headers = new HttpHeaders();
     private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
+    private static final String loggerLine = "---------------------------------------";
 
     @Override
     public ResponseEntity<?> authenticateUser(LoginRequest loginRequest) {
@@ -99,11 +100,14 @@ public class AuthServiceImpl implements AuthService {
         String jwt = jwtUtils.generateJwtToken(authentication);
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         List<String> roles = userDetails.getAuthorities().stream().map(item -> item.getAuthority()).collect(Collectors.toList());
-        logger.info("--------------------------");
+        logger.info(loggerLine);
         logger.info("Aunthenticate User " + authentication);
-        logger.info("--------------------------");
+        logger.info(loggerLine);
         return ResponseHandler.generateResponse(null, HttpStatus.OK, headers, ZonedDateTime.now(), new JwtResponse(jwt, userDetails.getUserId(), userDetails.getFirstName(), userDetails.getLastName(), userDetails.getUsername(), userDetails.getEmailAddress(), roles));
         } catch (Exception e) {
+            logger.error(loggerLine);
+            logger.error(e.getMessage());
+            logger.error(loggerLine);
             return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.MULTI_STATUS, headers, ZonedDateTime.now(), null);
         }
     }
@@ -145,13 +149,19 @@ public class AuthServiceImpl implements AuthService {
             }
             user.setRoles(roles);
             userRepository.save(user);
-            logger.info("--------------------------");
+            logger.info(loggerLine);
             logger.info("Register User " + user);
-            logger.info("--------------------------");
+            logger.info(loggerLine);
             return ResponseHandler.generateResponse(null, HttpStatus.OK, headers, ZonedDateTime.now(), new MessageResponse("User registered successfully!"));
         } catch (ResourceAlreadyExistException e) {
+            logger.error(loggerLine);
+            logger.error(e.getMessage());
+            logger.error(loggerLine);
             return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.BAD_REQUEST, headers, ZonedDateTime.now(), null);
         }catch (RuntimeException e) {
+            logger.error(loggerLine);
+            logger.error(e.getMessage());
+            logger.error(loggerLine);
             return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.BAD_REQUEST, headers, ZonedDateTime.now(), null);
         } 
     }
@@ -166,13 +176,19 @@ public class AuthServiceImpl implements AuthService {
             String emailAddress = forgetPasswordRequestDTO.getEmailAddress();
             int otp = otpService.generateOTP(emailAddress);
             emailSender.sendOtpMessage(emailAddress, "BIOSKOP6 Reset Password Request", String.valueOf(otp));
-            logger.info("--------------------------");
+            logger.info(loggerLine);
             logger.info("Forget Password " + emailAddress);
-            logger.info("--------------------------");
+            logger.info(loggerLine);
             return ResponseHandler.generateResponse(null, HttpStatus.OK, headers, ZonedDateTime.now(), new MessageResponse("OTP has been sent to your email!"));
         } catch (ResourceNotFoundException e) {
+            logger.error(loggerLine);
+            logger.error(e.getMessage());
+            logger.error(loggerLine);
             return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.NOT_FOUND, headers, ZonedDateTime.now(), null);
         } catch (MessagingException e) {
+            logger.error(loggerLine);
+            logger.error(e.getMessage());
+            logger.error(loggerLine);
             return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.BAD_REQUEST, headers, ZonedDateTime.now(), null);
 
         }
@@ -189,13 +205,19 @@ public class AuthServiceImpl implements AuthService {
             }
             resetPasswordTokenRepository.deleteByEmailAddress(confirmOTPRequestDTO.getEmailAddress());
             ResetPasswordToken resetPasswordToken = resetPasswordTokenRepository.save(ResetPasswordToken.builder().emailAddress(confirmOTPRequestDTO.getEmailAddress()).build());
-            logger.info("--------------------------");
+            logger.info(loggerLine);
             logger.info("Confirm OTP " + resetPasswordToken);
-            logger.info("--------------------------");
+            logger.info(loggerLine);
             return ResponseHandler.generateResponse(null, HttpStatus.OK, headers, ZonedDateTime.now(), new MessageResponse(domain + ":" + port + "/api/auth/reset_password?token=" + resetPasswordToken.getToken().toString()));
         } catch (ResourceNotFoundException e) {
+            logger.error(loggerLine);
+            logger.error(e.getMessage());
+            logger.error(loggerLine);
             return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.NOT_FOUND, headers, ZonedDateTime.now(), null);
         } catch (WrongOTPException e) {
+            logger.error(loggerLine);
+            logger.error(e.getMessage());
+            logger.error(loggerLine);
             return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.NOT_FOUND, headers, ZonedDateTime.now(), null);
         }
     }
@@ -216,13 +238,19 @@ public class AuthServiceImpl implements AuthService {
             user.setPassword(encoder.encode(resetPasswordRequestDTO.getNewPassword()));
             userRepository.save(user);
             resetPasswordTokenRepository.deleteByEmailAddress(resetPasswordToken.get().getEmailAddress());
-            logger.info("--------------------------");
+            logger.info(loggerLine);
             logger.info("Reset Password " + user);
-            logger.info("--------------------------");
+            logger.info(loggerLine);
             return ResponseHandler.generateResponse(null, HttpStatus.OK, headers, ZonedDateTime.now(), new MessageResponse("Password has been reseted!"));
         } catch (PasswordNotMatchException e) {
+            logger.error(loggerLine);
+            logger.error(e.getMessage());
+            logger.error(loggerLine);
             return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.NOT_ACCEPTABLE, headers, ZonedDateTime.now(), null);
         } catch (ResourceNotFoundException e) {
+            logger.error(loggerLine);
+            logger.error(e.getMessage());
+            logger.error(loggerLine);
             return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.NOT_ACCEPTABLE, headers, ZonedDateTime.now(), null);
 
         }

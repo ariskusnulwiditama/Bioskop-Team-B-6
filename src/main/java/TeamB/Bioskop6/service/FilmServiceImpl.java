@@ -36,6 +36,7 @@ public class FilmServiceImpl implements FilmService {
 
     private final HttpHeaders headers = new HttpHeaders();
     private static final Logger logger = LoggerFactory.getLogger(FilmController.class);
+    private static final String loggerLine = "---------------------------------------";
 
     @Override
     public ResponseEntity<?> getAllFilm() {
@@ -46,11 +47,14 @@ public class FilmServiceImpl implements FilmService {
             for (Film film : filmList){
                 filmResponseDTOS.add(film.convertToResponse());
             }
-            logger.info("--------------------------");
+            logger.info(loggerLine);
             logger.info("Get All Film Data " + filmList);
-            logger.info("--------------------------");
+            logger.info(loggerLine);
             return ResponseHandler.generateResponse("Successfully retrieve all Seats!", HttpStatus.OK, headers, ZonedDateTime.now(), filmResponseDTOS);
         } catch (Exception e) {
+            logger.error(loggerLine);
+            logger.error(e.getMessage());
+            logger.error(loggerLine);
             return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.MULTI_STATUS, headers, ZonedDateTime.now(), null);
         }
     }
@@ -61,11 +65,14 @@ public class FilmServiceImpl implements FilmService {
         try {
             Film film = filmRepository.findById(code).orElseThrow(() -> new ResourceNotFoundException("Film with Code " + code + " is not available!"));
             FilmResponseDTO filmResponseDTO = film.convertToResponse();
-            logger.info("--------------------------");
+            logger.info(loggerLine);
             logger.info("Get All Film By ID " + film);
-            logger.info("--------------------------");
+            logger.info(loggerLine);
             return ResponseHandler.generateResponse("Successfully retrieve Seats By ID!", HttpStatus.OK, headers, ZonedDateTime.now(), filmResponseDTO);
         } catch (ResourceNotFoundException e) {
+            logger.error(loggerLine);
+            logger.error(e.getMessage());
+            logger.error(loggerLine);
             return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.NOT_FOUND, headers, ZonedDateTime.now(), null);
         }
     }
@@ -77,11 +84,14 @@ public class FilmServiceImpl implements FilmService {
             Film film = filmRequestDTO.convertToEntity();
             filmRepository.findById(film.getFilmCode()).orElseThrow(() -> new ResourceAlreadyExistException("Film with Code " + film.getFilmCode() + " is already exists!"));
             Film newFilm = filmRepository.save(film);
-            logger.info("--------------------------");
+            logger.info(loggerLine);
             logger.info("Create Film " + film);
-            logger.info("--------------------------");
+            logger.info(loggerLine);
             return ResponseHandler.generateResponse("User with ID " + newFilm.getFilmCode() + " successfully created!", HttpStatus.CREATED, headers, ZonedDateTime.now(), newFilm);
         } catch (ResourceAlreadyExistException e) {
+            logger.error(loggerLine);
+            logger.error(e.getMessage());
+            logger.error(loggerLine);
             return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.NOT_ACCEPTABLE, headers, ZonedDateTime.now(), null);
         }
     }
@@ -93,11 +103,14 @@ public class FilmServiceImpl implements FilmService {
             Film film = filmRequestDTO.convertToEntity();
             filmRepository.findById(film.getFilmCode()).orElseThrow(() -> new ResourceNotFoundException("Film with Code " + film.getFilmCode() + " is not available!"));
             Film updatedFilm = filmRepository.save(film);
-            logger.info("--------------------------");
+            logger.info(loggerLine);
             logger.info("Update Film " + film);
-            logger.info("--------------------------");
+            logger.info(loggerLine);
             return ResponseHandler.generateResponse("User with ID " + updatedFilm.getFilmCode() + " successfully updated!", HttpStatus.OK, headers, ZonedDateTime.now(), updatedFilm);
         } catch (Exception e) {
+            logger.error(loggerLine);
+            logger.error(e.getMessage());
+            logger.error(loggerLine);
             return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.NOT_FOUND, headers, ZonedDateTime.now(), null);
         }
     }
@@ -108,11 +121,14 @@ public class FilmServiceImpl implements FilmService {
         try {
             Film film = filmRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Film with ID " + id + " is not available!"));
             filmRepository.delete(film);
-            logger.info("--------------------------");
+            logger.info(loggerLine);
             logger.info("Delete Film " + film);
-            logger.info("--------------------------");
+            logger.info(loggerLine);
             return ResponseHandler.generateResponse("User with ID " + id + " successfully deleted!", HttpStatus.OK, headers, ZonedDateTime.now(), null);
         } catch (Exception e) {
+            logger.error(loggerLine);
+            logger.error(e.getMessage());
+            logger.error(loggerLine);
             return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.NOT_FOUND, headers, ZonedDateTime.now(), null);
         }
     }

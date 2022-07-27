@@ -30,6 +30,7 @@ public class ReservationsServiceImpl implements ReservationsService {
 
     private final HttpHeaders headers = new HttpHeaders();
     private static final Logger logger = LoggerFactory.getLogger(ReservationController.class);
+    private static final String loggerLine = "---------------------------------------";
 
 
     @Value("${com.app.name}")
@@ -47,11 +48,14 @@ public class ReservationsServiceImpl implements ReservationsService {
             for (Reservation reservations : reservationsList){
                 reservationResponseDTOS.add(reservations.convertToResponse());
             }
-            logger.info("--------------------------");
+            logger.info(loggerLine);
             logger.info("Get All Reservations Data " + reservationsList);
-            logger.info("--------------------------");
+            logger.info(loggerLine);
             return ResponseHandler.generateResponse(null, HttpStatus.OK, headers, ZonedDateTime.now(), reservationResponseDTOS);
         } catch (Exception e) {
+            logger.error(loggerLine);
+            logger.error(e.getMessage());
+            logger.error(loggerLine);
             return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.MULTI_STATUS, headers, ZonedDateTime.now(), null);
         }
     }
@@ -62,11 +66,14 @@ public class ReservationsServiceImpl implements ReservationsService {
         try {
             Reservation reservation = reservationRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User with ID " + id + " is not available!"));
             ReservationResponseDTO reservationResponseDTO = reservation.convertToResponse();
-            logger.info("--------------------------");
+            logger.info(loggerLine);
             logger.info("Get All Reservations By ID " + reservation);
-            logger.info("--------------------------");
+            logger.info(loggerLine);
             return ResponseHandler.generateResponse(null, HttpStatus.OK, headers, ZonedDateTime.now(), reservationResponseDTO);
         } catch (ResourceNotFoundException e) {
+            logger.error(loggerLine);
+            logger.error(e.getMessage());
+            logger.error(loggerLine);
             return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.NOT_FOUND, headers, ZonedDateTime.now(), null);
         }
     }
@@ -78,11 +85,14 @@ public class ReservationsServiceImpl implements ReservationsService {
             Reservation reservation = reservationRequestDTO.convertToEntity();
             reservationRepository.findById(reservation.getReservationId()).orElseThrow(() -> new ResourceAlreadyExistException("User with ID " + reservation.getReservationId() + " is already exist!"));
             Reservation newReservations = reservationRepository.save(reservation);
-            logger.info("--------------------------");
+            logger.info(loggerLine);
             logger.info("Create Reservations " + reservation);
-            logger.info("--------------------------");
+            logger.info(loggerLine);
             return ResponseHandler.generateResponse("User with ID " + newReservations.getReservationId() + " successfully created!", HttpStatus.CREATED, headers, ZonedDateTime.now(), newReservations);
         } catch (ResourceAlreadyExistException e) {
+            logger.error(loggerLine);
+            logger.error(e.getMessage());
+            logger.error(loggerLine);
             return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.NOT_ACCEPTABLE, headers, ZonedDateTime.now(), null);
         }
     }
@@ -94,11 +104,14 @@ public class ReservationsServiceImpl implements ReservationsService {
             Reservation reservation = reservationRequestDTO.convertToEntity();
             reservationRepository.findById(reservation.getReservationId()).orElseThrow(() -> new ResourceNotFoundException("User with ID " + reservation.getReservationId() + " is not available!"));
             Reservation updatedReservations = reservationRepository.save(reservation);
-            logger.info("--------------------------");
+            logger.info(loggerLine);
             logger.info("Update Reservations " + reservation);
-            logger.info("--------------------------");
+            logger.info(loggerLine);
             return ResponseHandler.generateResponse("User with ID " + updatedReservations.getReservationId() + " successfully updated!", HttpStatus.OK, headers, ZonedDateTime.now(), updatedReservations);
         } catch (ResourceNotFoundException e) {
+            logger.error(loggerLine);
+            logger.error(e.getMessage());
+            logger.error(loggerLine);
             return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.NOT_FOUND, headers, ZonedDateTime.now(), null);
         }
     }
@@ -109,11 +122,14 @@ public class ReservationsServiceImpl implements ReservationsService {
         try {
             Reservation reservation = reservationRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User with ID " + id + " is not available!"));
             reservationRepository.delete(reservation);
-            logger.info("--------------------------");
+            logger.info(loggerLine);
             logger.info("Delete Reservations " + reservation);
-            logger.info("--------------------------");
+            logger.info(loggerLine);
             return ResponseHandler.generateResponse("User with ID " + id + " successfully deleted!", HttpStatus.OK, headers, ZonedDateTime.now(), null);
         } catch (Exception e) {
+            logger.error(loggerLine);
+            logger.error(e.getMessage());
+            logger.error(loggerLine);
             return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.NOT_FOUND, headers, ZonedDateTime.now(), null);
         }
     }
