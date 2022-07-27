@@ -100,7 +100,7 @@ public class ScheduleController {
      * @return void
      * @throws Exception
      */
-    @GetMapping("/seats/print")
+    @GetMapping("/schedules/print")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public void printReport() throws Exception {
         response.setContentType("application/pdf");
