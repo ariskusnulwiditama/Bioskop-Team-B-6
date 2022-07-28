@@ -32,7 +32,7 @@ public class Studio {
     @Enumerated(EnumType.STRING)
     private EStudioType type;
 
-    private String capacity;
+    private String capasity;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
@@ -45,7 +45,7 @@ public class Studio {
             .studioId(this.studioId)
             .studioName(this.studioName)
             .type(this.type)
-            .capacity(this.capacity)
+            .capasity(this.capasity)
             .createdAt(this.createdAt)
             .updatedAt(this.updatedAt)
             .build();

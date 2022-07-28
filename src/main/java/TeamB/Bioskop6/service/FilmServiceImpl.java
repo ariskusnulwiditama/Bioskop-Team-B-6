@@ -82,7 +82,9 @@ public class FilmServiceImpl implements FilmService {
         headers.set("APP-NAME", projectName + "-API " + projectTeam);
         try {
             Film film = filmRequestDTO.convertToEntity();
-            filmRepository.findById(film.getFilmCode()).orElseThrow(() -> new ResourceAlreadyExistException("Film with Code " + film.getFilmCode() + " is already exists!"));
+            if (Boolean.TRUE.equals(filmRepository.existsByFilmCode(film.getFilmCode()))){
+                throw new ResourceAlreadyExistException("Film with Code " + film.getFilmCode() + " is already exists!");
+            }
             Film newFilm = filmRepository.save(film);
             logger.info(loggerLine);
             logger.info("Create Film " + film);
@@ -101,7 +103,9 @@ public class FilmServiceImpl implements FilmService {
         headers.set("APP-NAME", projectName + "-API " + projectTeam);
         try {
             Film film = filmRequestDTO.convertToEntity();
-            filmRepository.findById(film.getFilmCode()).orElseThrow(() -> new ResourceNotFoundException("Film with Code " + film.getFilmCode() + " is not available!"));
+            if (Boolean.FALSE.equals(filmRepository.existsByFilmCode(film.getFilmCode()))){
+                throw new ResourceNotFoundException("Film with Code " + film.getFilmCode() + " is not available!");
+            }
             Film updatedFilm = filmRepository.save(film);
             logger.info(loggerLine);
             logger.info("Update Film " + film);

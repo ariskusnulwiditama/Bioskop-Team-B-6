@@ -1,13 +1,14 @@
 package TeamB.Bioskop6.service;
 
-import TeamB.Bioskop6.controller.ReservationController;
 import TeamB.Bioskop6.controller.ScheduleController;
+import TeamB.Bioskop6.dto.MessageResponse;
 import TeamB.Bioskop6.dto.ScheduleRequestDTO;
 import TeamB.Bioskop6.dto.ScheduleResponseDTO;
+import TeamB.Bioskop6.entity.Film;
 import TeamB.Bioskop6.entity.Schedule;
 import TeamB.Bioskop6.handler.ResponseHandler;
-import TeamB.Bioskop6.helper.ResourceAlreadyExistException;
 import TeamB.Bioskop6.helper.ResourceNotFoundException;
+import TeamB.Bioskop6.repository.FilmRepository;
 import TeamB.Bioskop6.repository.ScheduleRepository;
 
 import org.slf4j.Logger;
@@ -29,9 +30,12 @@ public class ScheduleServiceImpl implements ScheduleService {
     ScheduleRepository scheduleRepository;
     
     private final HttpHeaders headers = new HttpHeaders();
+
     private static final Logger logger = LoggerFactory.getLogger(ScheduleController.class);
     private static final String loggerLine = "---------------------------------------";
 
+    @Autowired
+    FilmRepository filmRepository;
 
     @Value("${com.app.name}")
     String projectName;
@@ -79,20 +83,17 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    public ResponseEntity<?> createSchedule(ScheduleRequestDTO scheduleRequestDTO) throws ResourceAlreadyExistException {
+    public ResponseEntity<?> createSchedule(ScheduleRequestDTO scheduleRequestDTO) throws ResourceNotFoundException {
         headers.set("APP-NAME", projectName + "-API " + projectTeam);
         try {
-            Schedule schedule = scheduleRequestDTO.convertToEntity();
-            scheduleRepository.findById(schedule.getScheduleId()).orElseThrow(() -> new ResourceAlreadyExistException("Schedule with ID " + schedule.getScheduleId() + " is already exist!"));
-            Schedule newSchedule = scheduleRepository.save(schedule);
-            logger.info(loggerLine);
+            Film film = filmRepository.findById(scheduleRequestDTO.getFilmId()).orElseThrow(() -> new ResourceNotFoundException("Film with ID " + scheduleRequestDTO.getScheduleId() + " is not available!"));
+            Schedule schedule = Schedule.builder().film(film).Date(scheduleRequestDTO.getDate()).startTime(scheduleRequestDTO.getStartTime()).endTime(scheduleRequestDTO.getEndTime()).Price(scheduleRequestDTO.getPrice()).build();
+            scheduleRepository.save(schedule);
+            logger.info("--------------------------");
             logger.info("Create Schedule " + schedule);
-            logger.info(loggerLine);
-            return ResponseHandler.generateResponse("Schedule with ID " + newSchedule.getScheduleId() + " successfully created!", HttpStatus.CREATED, headers, ZonedDateTime.now(), newSchedule);
-        } catch (ResourceAlreadyExistException e) {
-            logger.error(loggerLine);
-            logger.error(e.getMessage());
-            logger.error(loggerLine);
+            logger.info("--------------------------");
+            return ResponseHandler.generateResponse(null, HttpStatus.CREATED, headers, ZonedDateTime.now(), new MessageResponse("New schedule succesfully created!"));
+        } catch (ResourceNotFoundException e) {
             return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.NOT_ACCEPTABLE, headers, ZonedDateTime.now(), null);
         }
     }
@@ -101,17 +102,15 @@ public class ScheduleServiceImpl implements ScheduleService {
     public ResponseEntity<?> updateSchedule(ScheduleRequestDTO scheduleRequestDTO) throws ResourceNotFoundException {
         headers.set("APP-NAME", projectName + "-API " + projectTeam);
         try {
-            Schedule schedule = scheduleRequestDTO.convertToEntity();
+            Film film = filmRepository.findById(scheduleRequestDTO.getFilmId()).orElseThrow(() -> new ResourceNotFoundException("Film with ID " + scheduleRequestDTO.getScheduleId() + " is not available!"));
+            Schedule schedule = Schedule.builder().film(film).Date(scheduleRequestDTO.getDate()).startTime(scheduleRequestDTO.getStartTime()).endTime(scheduleRequestDTO.getEndTime()).Price(scheduleRequestDTO.getPrice()).build();
             scheduleRepository.findById(schedule.getScheduleId()).orElseThrow(() -> new ResourceNotFoundException("Schedule with ID " + schedule.getScheduleId() + " is not available!"));
-            Schedule updatedSchedule = scheduleRepository.save(schedule);
-            logger.info(loggerLine);
+            scheduleRepository.save(schedule);
+            logger.info("--------------------------");
             logger.info("Update Schedule " + schedule);
-            logger.info(loggerLine);
-            return ResponseHandler.generateResponse("Schedule with ID " + updatedSchedule.getScheduleId() + " successfully updated!", HttpStatus.OK, headers, ZonedDateTime.now(), updatedSchedule);
-        } catch (Exception e) {
-            logger.error(loggerLine);
-            logger.error(e.getMessage());
-            logger.error(loggerLine);
+            logger.info("--------------------------");
+            return ResponseHandler.generateResponse(null, HttpStatus.OK, headers, ZonedDateTime.now(), new MessageResponse("Schedule succesfully created!"));
+        } catch (ResourceNotFoundException e) {
             return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.NOT_FOUND, headers, ZonedDateTime.now(), null);
         }
     }

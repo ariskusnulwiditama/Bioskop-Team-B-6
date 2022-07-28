@@ -1,13 +1,11 @@
 package TeamB.Bioskop6.dto;
 
-import TeamB.Bioskop6.entity.Film;
-import TeamB.Bioskop6.entity.Schedule;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Getter
 @Setter
@@ -15,33 +13,18 @@ import java.time.LocalTime;
 @NoArgsConstructor
 @Builder
 public class ScheduleRequestDTO {
+    private Integer scheduleId;
 
-    private Film film;
+    private Integer filmId;
 
-    @JsonFormat(shape=JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd")
-    private LocalDate Date;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate date;
 
-    @JsonFormat(shape=JsonFormat.Shape.STRING,pattern = "HH:mm:ss")
+    @JsonFormat(pattern = "HH:mm")
     private LocalTime startTime;
 
-    @JsonFormat(shape=JsonFormat.Shape.STRING,pattern = "HH:mm:ss")
+    @JsonFormat(pattern = "HH:mm")
     private LocalTime endTime;
 
-    private Double Price;
-
-    private LocalDateTime createdAt;
-
-    private LocalDateTime updatedAt;
-
-    public Schedule convertToEntity(){
-        return Schedule.builder()
-                .film(this.film)
-                .Date(this.Date)
-                .startTime(this.startTime)
-                .endTime(this.endTime)
-                .Price(this.Price)
-                .createdAt(this.createdAt)
-                .updatedAt(this.updatedAt)
-                .build();
-    }
+    private Double price;
 }

@@ -16,14 +16,14 @@ public class StudioRequestDTO {
 
     private EStudioType type;
 
-    private String capacity;
+    private String capasity;
 
     public Studio convertToEntity(){
         return Studio.builder()
             .studioId(this.studioId)
             .studioName(this.studioName)
             .type(this.type)
-            .capacity(this.capacity)
+            .capasity(this.capasity)
             .build();
     }
 }

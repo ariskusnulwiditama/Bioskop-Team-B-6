@@ -60,7 +60,7 @@ public class ReservationController {
      */
     @PostMapping("/reservation/create")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<?> create(ReservationRequestDTO reservationRequestDTO) throws ResourceAlreadyExistException {
+    public ResponseEntity<?> create(ReservationRequestDTO reservationRequestDTO) throws ResourceNotFoundException {
         return reservationService.createReservation(reservationRequestDTO);
     }
 
@@ -87,6 +87,17 @@ public class ReservationController {
     public ResponseEntity<?> deleteReservations(@PathVariable Integer id) throws ResourceNotFoundException {
         return reservationService.deleteReservation(id);
     }
+    
+    /***
+     * Get All reservation where user is logged user
+     * @return
+     * @throws ResourceNotFoundException
+     */
+    @GetMapping("/invoice")
+    public ResponseEntity<?> getInvoice() throws ResourceNotFoundException{
+        return reservationService.getInvoice();
+
+    }
 
     /***
      * print report of reservation table
@@ -94,7 +105,7 @@ public class ReservationController {
      * @throws Exception
      */
     @GetMapping("/reservations/print")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ROLE_CUSTOMER')")
         public void printReport() throws Exception {
             response.setContentType("application/pdf");
             response.setHeader("Content-Disposition", "inline; filename=\"report.pdf\"");

@@ -4,7 +4,6 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import TeamB.Bioskop6.controller.StudioController;
 import TeamB.Bioskop6.controller.UserController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +20,6 @@ import TeamB.Bioskop6.dto.UserResponseDTO;
 import TeamB.Bioskop6.entity.User;
 import TeamB.Bioskop6.entity.UserDetailsImpl;
 import TeamB.Bioskop6.handler.ResponseHandler;
-import TeamB.Bioskop6.helper.ResourceAlreadyExistException;
 import TeamB.Bioskop6.helper.ResourceNotFoundException;
 import TeamB.Bioskop6.repository.UserRepository;
 
@@ -76,25 +74,6 @@ public class UserServiceImpl implements UserService {
             logger.error(e.getMessage());
             logger.error(loggerLine);
             return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.NOT_FOUND, headers, ZonedDateTime.now(), null);
-        }
-    }
-
-    @Override
-    public ResponseEntity<?> createUser(UserRequestDTO userRequestDTO) throws ResourceAlreadyExistException {
-        headers.set("APP-NAME", projectName + "-API " + projectTeam);
-        try {
-            User user = userRequestDTO.convertToEntity();
-            userRepository.findById(user.getUserId()).orElseThrow(() -> new ResourceAlreadyExistException("User with ID " + user.getUserId() + " is already exist!"));
-            User newUser = this.userRepository.save(user);
-            logger.info(loggerLine);
-            logger.info("Create User " + user);
-            logger.info(loggerLine);
-            return ResponseHandler.generateResponse("User with ID " + newUser.getUserId() + " successfully created!", HttpStatus.CREATED, headers, ZonedDateTime.now(), newUser);
-        } catch (ResourceAlreadyExistException e) {
-            logger.error(loggerLine);
-            logger.error(e.getMessage());
-            logger.error(loggerLine);
-            return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.NOT_ACCEPTABLE, headers, ZonedDateTime.now(), null);
         }
     }
 
