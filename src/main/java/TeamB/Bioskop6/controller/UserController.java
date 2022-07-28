@@ -84,4 +84,13 @@ public class UserController {
     public ResponseEntity<?> delete(@PathVariable Integer id) throws ResourceNotFoundException {
         return userService.deleteUser(id);
     }
+    
+    /***
+     * Get logged in user
+     */
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @GetMapping("/getLoggedUser")
+    public ResponseEntity<?> resetPassword(){
+        return userService.getLoggedUser();
+    }
 }

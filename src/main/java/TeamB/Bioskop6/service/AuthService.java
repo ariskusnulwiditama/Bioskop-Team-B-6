@@ -18,7 +18,7 @@ import TeamB.Bioskop6.helper.ResourceNotFoundException;
 import TeamB.Bioskop6.helper.WrongOTPException;
 
 public interface AuthService {
-    ResponseEntity<?> authenticateUser(LoginRequest signinRequest);
+    ResponseEntity<?> authenticateUser(LoginRequest signinRequest) throws ResourceNotFoundException;
 
     ResponseEntity<?> registerUser(SignupRequest signupRequest) throws ResourceAlreadyExistException;
 

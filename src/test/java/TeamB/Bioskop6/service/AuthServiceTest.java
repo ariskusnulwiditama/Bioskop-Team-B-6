@@ -32,7 +32,7 @@
 // import TeamB.Bioskop6.entity.UserDetailsImpl;
 // import TeamB.Bioskop6.repository.ResetPasswordTokenRepository;
 // import TeamB.Bioskop6.repository.RoleRepository;
-// // import TeamB.Bioskop6.handler.ResponseHandler;
+// import TeamB.Bioskop6.handler.ResponseHandler;
 // import TeamB.Bioskop6.repository.UserRepository;
 // import TeamB.Bioskop6.util.EmailSender;
 
@@ -89,8 +89,8 @@
 //     void loginWithUsernamePositive_Test(){
 //         Role userRole = Role.builder().roleId(1).name(ERole.ROLE_ADMIN).build();
 
-//         Set<Role> roles = new HashSet<>();
-//         roles.add(userRole);
+//         GrantedAuthority grantedAuthority = new GrantedAuthority();
+
 
 //         User.builder()
 //                 .userId(1)
@@ -114,7 +114,7 @@
 //             .username("najibdj_")
 //             .emailAddress("najib.djulfikar@gmail.com")
 //             .password("password")
-//             .authorities((Collection<? extends GrantedAuthority>) roles)
+//             .authorities([{"authority": "ROLE_ADMIN" }, {"authority": "ROLE_USER"}])
 //             .build();
 
 //         when(authenticationManager.authenticate(any())).thenReturn(new CustomAuthentication());

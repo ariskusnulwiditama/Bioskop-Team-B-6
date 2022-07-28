@@ -3,15 +3,20 @@ package TeamB.Bioskop6.controller;
 import TeamB.Bioskop6.helper.ResourceAlreadyExistException;
 import TeamB.Bioskop6.helper.ResourceNotFoundException;
 import TeamB.Bioskop6.dto.ReservationRequestDTO;
+import TeamB.Bioskop6.service.ReportPDFImpl;
 import TeamB.Bioskop6.service.ReservationsServiceImpl;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperPrint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
 
 
 @RestController
@@ -22,6 +27,8 @@ import org.springframework.web.bind.annotation.*;
 public class ReservationController {
     @Autowired
     ReservationsServiceImpl reservationService;
+    private HttpServletResponse response;
+    private ReportPDFImpl reportReservation;
 
     /***
      * Get All data from reservation table into list
@@ -80,4 +87,20 @@ public class ReservationController {
     public ResponseEntity<?> deleteReservations(@PathVariable Integer id) throws ResourceNotFoundException {
         return reservationService.deleteReservation(id);
     }
+
+    /***
+     * print report of reservation table
+     * @return void
+     * @throws Exception
+     */
+    @GetMapping("/reservations/print")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+        public void printReport() throws Exception {
+            response.setContentType("application/pdf");
+            response.setHeader("Content-Disposition", "inline; filename=\"report.pdf\"");
+            JasperPrint jasperPrint = this.reportReservation.generateJasperPrint();
+            JasperExportManager.exportReportToPdfStream(jasperPrint, response.getOutputStream());
+            response.getOutputStream().flush();
+            response.getOutputStream().close();
+        }
 }
