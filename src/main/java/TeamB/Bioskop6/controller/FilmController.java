@@ -88,6 +88,18 @@ public class FilmController {
     }
 
     /***
+     * Find film that is playing
+     * @param id
+     * @return
+     * @throws ResourceNotFoundException
+     */
+    @GetMapping("/film/isplaying")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    public ResponseEntity<?> findIsPlaying() throws ResourceNotFoundException {
+        return filmService.findPlayingFilm();
+    }
+
+    /***
      * print report of films table
      * @return void
      * @throws Exception

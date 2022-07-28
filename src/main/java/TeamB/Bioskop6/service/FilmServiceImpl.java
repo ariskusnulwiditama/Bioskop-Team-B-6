@@ -120,4 +120,22 @@ public class FilmServiceImpl implements FilmService {
             return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.NOT_FOUND, headers, ZonedDateTime.now(), null);
         }
     }
+
+    @Override
+    public ResponseEntity<?> findPlayingFilm() throws ResourceNotFoundException {
+        headers.set("APP-NAME", projectName + "-API " + projectTeam);
+        try {
+            List<Film> filmList = filmRepository.findByIsPlaying(true);
+            List<FilmResponseDTO> filmResponseDTOS = new ArrayList<>();
+            for (Film film : filmList){
+                filmResponseDTOS.add(film.convertToResponse());
+            }
+            logger.info("--------------------------");
+            logger.info("Get All Film Data " + filmList);
+            logger.info("--------------------------");
+            return ResponseHandler.generateResponse("Successfully retrieve all Seats!", HttpStatus.OK, headers, ZonedDateTime.now(), filmResponseDTOS);
+        } catch (Exception e) {
+            return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.MULTI_STATUS, headers, ZonedDateTime.now(), null);
+        }
+    }
 }
