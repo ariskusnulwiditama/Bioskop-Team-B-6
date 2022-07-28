@@ -17,4 +17,6 @@ public interface ReservationsService {
     ResponseEntity<?> updateReservation(ReservationRequestDTO reservationRequestDTO) throws ResourceNotFoundException;
 
     ResponseEntity<?> deleteReservation(Integer id) throws ResourceNotFoundException;
+    
+    ResponseEntity<?> getInvoice() throws ResourceNotFoundException;
 }

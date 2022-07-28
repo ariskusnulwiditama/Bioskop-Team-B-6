@@ -4,6 +4,9 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 
+import TeamB.Bioskop6.entity.SeatDetail;
+import TeamB.Bioskop6.entity.User;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -12,8 +15,12 @@ import java.time.LocalDateTime;
 public class ReservationResponseDTO {
 
     private Integer reservationId;
-//    private Integer scheduleId;
+
     private Boolean isActive;
+
+    private SeatDetail seatDetail;
+
+    private User user;
 
     private LocalDateTime createdAt;
 

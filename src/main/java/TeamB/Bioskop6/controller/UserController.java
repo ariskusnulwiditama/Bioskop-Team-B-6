@@ -54,7 +54,7 @@ public class UserController {
      * @throws ResourceNotFoundException
      */
     @PutMapping("/user/update")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ROLE_CUSTOMER')")
     public ResponseEntity<?> update(UserRequestDTO userRequestDTO) throws ResourceNotFoundException {
         return userService.updateUser(userRequestDTO);
     }
@@ -66,7 +66,7 @@ public class UserController {
      * @throws ResourceNotFoundException
      */
     @DeleteMapping("/user/delete/{id}")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ROLE_CUSTOMER')")
     public ResponseEntity<?> delete(@PathVariable Integer id) throws ResourceNotFoundException {
         return userService.deleteUser(id);
     }

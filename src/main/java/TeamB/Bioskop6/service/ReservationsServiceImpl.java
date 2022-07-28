@@ -17,6 +17,7 @@ import TeamB.Bioskop6.handler.ResponseHandler;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -134,4 +135,26 @@ public class ReservationsServiceImpl implements ReservationsService {
         }
     }
 
+    @Override
+    public ResponseEntity<?> getInvoice() throws ResourceNotFoundException {
+        headers.set("APP-NAME", projectName + "-API " + projectTeam);
+        try {
+            UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            Optional<User> user = userRepository.findById(userDetails.getUserId());
+            List<Reservation> reservationsList = reservationRepository.findReservationsByUser(user.get());
+            if (reservationsList.isEmpty()) {
+                throw new ResourceNotFoundException("You have no invoice!");
+            }
+            List<ReservationResponseDTO> reservationResponseDTOS = new ArrayList<>();
+            for (Reservation reservations : reservationsList){
+                reservationResponseDTOS.add(reservations.convertToResponse());
+            }
+            logger.info("--------------------------");
+            logger.info("Get All Reservations Data " + reservationsList);
+            logger.info("--------------------------");
+            return ResponseHandler.generateResponse(null, HttpStatus.OK, headers, ZonedDateTime.now(), reservationResponseDTOS);
+        } catch (ResourceNotFoundException e) {
+            return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.NOT_FOUND, headers, ZonedDateTime.now(), null);
+        }
+    }
 }

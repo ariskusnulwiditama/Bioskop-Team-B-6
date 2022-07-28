@@ -39,6 +39,8 @@ public class Reservation {
     public ReservationResponseDTO convertToResponse(){
         return ReservationResponseDTO.builder()
                 .reservationId(this.reservationId)
+                .seatDetail(this.seatDetail)
+                .user(this.user)
                 .isActive(this.isActive)
                 .createdAt(this.createdAt)
                 .updatedAt(this.updatedAt)
@@ -47,11 +49,9 @@ public class Reservation {
 
     @Override
     public String toString() {
-        return "Reservations{" +
-                "reservationId=" + reservationId +
-                ", isActive=" + isActive +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
-                '}';
+        return "Reservation [createdAt=" + createdAt + ", isActive=" + isActive + ", reservationId=" + reservationId
+                + ", seatDetail=" + seatDetail + ", updatedAt=" + updatedAt + ", user=" + user + "]";
     }
+
+
 }
