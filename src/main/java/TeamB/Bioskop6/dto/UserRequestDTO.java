@@ -1,5 +1,10 @@
 package TeamB.Bioskop6.dto;
 
+import java.time.LocalDateTime;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import TeamB.Bioskop6.entity.User;
 import lombok.*;
 
@@ -21,6 +26,12 @@ public class UserRequestDTO {
     
     private String password;
 
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
+
     /***
      * request to create new User
      * @return
@@ -33,6 +44,8 @@ public class UserRequestDTO {
             .username(this.username)
             .emailAddress(this.emailAddress)
             .password(this.password)
+            .createdAt(this.createdAt)
+            .updatedAt(this.updatedAt)
             .build();
     }
 

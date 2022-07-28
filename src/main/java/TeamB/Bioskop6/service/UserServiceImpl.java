@@ -13,8 +13,10 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import TeamB.Bioskop6.dto.MessageResponse;
 import TeamB.Bioskop6.dto.UserRequestDTO;
 import TeamB.Bioskop6.dto.UserResponseDTO;
 import TeamB.Bioskop6.entity.User;
@@ -27,6 +29,9 @@ import TeamB.Bioskop6.repository.UserRepository;
 public class UserServiceImpl implements UserService {
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    PasswordEncoder encoder;
 
     private final HttpHeaders headers = new HttpHeaders();
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
@@ -83,11 +88,11 @@ public class UserServiceImpl implements UserService {
         try {
             User user = userRequestDTO.convertToEntity();
             userRepository.findById(user.getUserId()).orElseThrow(() -> new ResourceNotFoundException("User with ID " + user.getUserId() + " is not available!"));
-            User updatedUser = userRepository.save(user);
-            logger.info(loggerLine);
+            userRepository.save(user);
+            logger.info("--------------------------");
             logger.info("Update User " + user);
-            logger.info(loggerLine);
-            return ResponseHandler.generateResponse("User with ID " + updatedUser.getUserId() + " successfully updated!", HttpStatus.OK, headers, ZonedDateTime.now(), updatedUser);
+            logger.info("--------------------------");
+            return ResponseHandler.generateResponse("User with ID " + user.getUserId() + " successfully updated!", HttpStatus.OK, headers, ZonedDateTime.now(), new MessageResponse("User successfully Updated!"));
         } catch (ResourceNotFoundException e) {
             logger.error(loggerLine);
             logger.error(e.getMessage());

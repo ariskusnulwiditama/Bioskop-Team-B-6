@@ -4,6 +4,7 @@ import TeamB.Bioskop6.controller.ScheduleController;
 import TeamB.Bioskop6.dto.MessageResponse;
 import TeamB.Bioskop6.dto.ScheduleRequestDTO;
 import TeamB.Bioskop6.dto.ScheduleResponseDTO;
+import TeamB.Bioskop6.dto.getScheduleByFIlmNameRequest;
 import TeamB.Bioskop6.entity.Film;
 import TeamB.Bioskop6.entity.Schedule;
 import TeamB.Bioskop6.handler.ResponseHandler;
@@ -130,6 +131,24 @@ public class ScheduleServiceImpl implements ScheduleService {
             logger.error(e.getMessage());
             logger.error(loggerLine);
             return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.NOT_FOUND, headers, ZonedDateTime.now(), null);
+        }
+    }
+
+    @Override
+    public ResponseEntity<?> findScheduleByFilmName(getScheduleByFIlmNameRequest filmName) throws ResourceNotFoundException {
+        headers.set("APP-NAME", projectName + "-API " + projectTeam);
+        try {
+            List<Schedule> scheduleList = scheduleRepository.findScheduleByFilmName(filmName.getFilmName());
+            List<ScheduleResponseDTO> scheduleResponseDTOs = new ArrayList<>();
+            for (Schedule schedule : scheduleList){
+                scheduleResponseDTOs.add(schedule.convertToResponse());
+            }
+            logger.info("--------------------------");
+            logger.info("Get All Schedule Data " + scheduleList);
+            logger.info("--------------------------");
+            return ResponseHandler.generateResponse(null, HttpStatus.OK, headers, ZonedDateTime.now(), scheduleResponseDTOs);
+        } catch (Exception e) {
+            return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.MULTI_STATUS, headers, ZonedDateTime.now(), null);
         }
     }
 }
