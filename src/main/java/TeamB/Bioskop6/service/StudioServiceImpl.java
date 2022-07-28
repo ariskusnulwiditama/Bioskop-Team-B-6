@@ -30,6 +30,7 @@ public class StudioServiceImpl implements StudioService {
     
     private final HttpHeaders headers = new HttpHeaders();
     private static final Logger logger = LoggerFactory.getLogger(StudioController.class);
+    private static final String loggerLine = "---------------------------------------";
 
     @Value("${com.app.name}")
     String projectName;
@@ -46,11 +47,14 @@ public class StudioServiceImpl implements StudioService {
             for (Studio studio : studioList){
                 studioResponseDTOs.add(studio.convertToResponse());
             }
-            logger.info("--------------------------");
+            logger.info(loggerLine);
             logger.info("Get All Studio Data " + studioList);
-            logger.info("--------------------------");
+            logger.info(loggerLine);
             return ResponseHandler.generateResponse(null, HttpStatus.OK, headers, ZonedDateTime.now(), studioResponseDTOs);
         } catch (Exception e) {
+            logger.error(loggerLine);
+            logger.error(e.getMessage());
+            logger.error(loggerLine);
             return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.MULTI_STATUS, headers, ZonedDateTime.now(), null);
         }
     }
@@ -61,11 +65,14 @@ public class StudioServiceImpl implements StudioService {
         try {
             Studio studio = studioRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Studio with ID "+ id + " is not available!"));
             StudioResponseDTO studioResponseDTO = studio.convertToResponse();
-            logger.info("--------------------------");
+            logger.info(loggerLine);
             logger.info("Get All Studio Data By ID " + studio);
-            logger.info("--------------------------");
+            logger.info(loggerLine);
             return ResponseHandler.generateResponse(null, HttpStatus.OK, headers, ZonedDateTime.now(), studioResponseDTO);
         } catch (ResourceNotFoundException e) {
+            logger.error(loggerLine);
+            logger.error(e.getMessage());
+            logger.error(loggerLine);
             return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.NOT_FOUND, headers, ZonedDateTime.now(), null);
         }
     }
@@ -77,11 +84,14 @@ public class StudioServiceImpl implements StudioService {
             Studio studio = studioRequestDTO.convertToEntity();
             studioRepository.findById(studio.getStudioId()).orElseThrow(() -> new ResourceAlreadyExistException("Studio with ID " + studio.getStudioId() + " is already exists!"));
             Studio newStudio = studioRepository.save(studio);
-            logger.info("--------------------------");
+            logger.info(loggerLine);
             logger.info("Create Studio" + studio);
-            logger.info("--------------------------");
+            logger.info(loggerLine);
             return ResponseHandler.generateResponse("Studio with ID " + newStudio.getStudioId() + " successfully created!", HttpStatus.CREATED, headers, ZonedDateTime.now(), newStudio);
         } catch (ResourceAlreadyExistException e) {
+            logger.error(loggerLine);
+            logger.error(e.getMessage());
+            logger.error(loggerLine);
             return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.NOT_ACCEPTABLE, headers, ZonedDateTime.now(), null);
         }
     }
@@ -93,11 +103,14 @@ public class StudioServiceImpl implements StudioService {
             Studio studio = studioRequestDTO.convertToEntity();
             studioRepository.findById(studio.getStudioId()).orElseThrow(() -> new ResourceNotFoundException("Studio with ID "+ studio.getStudioId() + " is not available!"));
             Studio updatedStudio = studioRepository.save(studio);
-            logger.info("--------------------------");
+            logger.info(loggerLine);
             logger.info("Update Studio" + studio);
-            logger.info("--------------------------");
+            logger.info(loggerLine);
             return ResponseHandler.generateResponse("Studio with ID " + updatedStudio.getStudioId() + " successfully updated!", HttpStatus.OK, headers, ZonedDateTime.now(), updatedStudio);
         } catch (Exception e) {
+            logger.error(loggerLine);
+            logger.error(e.getMessage());
+            logger.error(loggerLine);
             return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.NOT_FOUND, headers, ZonedDateTime.now(), null);
         }
     }
@@ -108,11 +121,14 @@ public class StudioServiceImpl implements StudioService {
         try {
             Studio studio = studioRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Studio with ID " + id + " is not available!"));
             studioRepository.delete(studio);
-            logger.info("--------------------------");
+            logger.info(loggerLine);
             logger.info("Delete Studio" + studio);
-            logger.info("--------------------------");
+            logger.info(loggerLine);
             return ResponseHandler.generateResponse("Studio with ID " + id + " successfully deleted!", HttpStatus.OK, headers, ZonedDateTime.now(), null);
         } catch (Exception e) {
+            logger.error(loggerLine);
+            logger.error(e.getMessage());
+            logger.error(loggerLine);
             return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.NOT_FOUND, headers, ZonedDateTime.now(), null);
         }
     }
