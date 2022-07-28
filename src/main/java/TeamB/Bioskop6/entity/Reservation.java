@@ -19,6 +19,14 @@ public class Reservation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer reservationId;
 
+    @ManyToOne
+    @JoinColumn(name = "seat_detail_id")
+    private SeatDetail seatDetail;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
     private Boolean isActive;
 
     @CreationTimestamp

@@ -1,12 +1,17 @@
 package TeamB.Bioskop6.service;
 
 import TeamB.Bioskop6.controller.ReservationController;
-import TeamB.Bioskop6.helper.ResourceAlreadyExistException;
 import TeamB.Bioskop6.helper.ResourceNotFoundException;
 import TeamB.Bioskop6.repository.ReservationsRepository;
+import TeamB.Bioskop6.repository.SeatDetailRepository;
+import TeamB.Bioskop6.repository.UserRepository;
+import TeamB.Bioskop6.dto.MessageResponse;
 import TeamB.Bioskop6.dto.ReservationRequestDTO;
 import TeamB.Bioskop6.dto.ReservationResponseDTO;
 import TeamB.Bioskop6.entity.Reservation;
+import TeamB.Bioskop6.entity.SeatDetail;
+import TeamB.Bioskop6.entity.User;
+import TeamB.Bioskop6.entity.UserDetailsImpl;
 import TeamB.Bioskop6.handler.ResponseHandler;
 
 import java.time.ZonedDateTime;
@@ -20,12 +25,19 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ReservationsServiceImpl implements ReservationsService {
     @Autowired
     ReservationsRepository reservationRepository;
+
+    @Autowired
+    UserRepository userRepository;
+
+    @Autowired
+    SeatDetailRepository seatDetailRepository;
 
     private final HttpHeaders headers = new HttpHeaders();
     private static final Logger logger = LoggerFactory.getLogger(ReservationController.class);
@@ -71,17 +83,19 @@ public class ReservationsServiceImpl implements ReservationsService {
     }
 
     @Override
-    public ResponseEntity<?> createReservation(ReservationRequestDTO reservationRequestDTO) throws ResourceAlreadyExistException {
+    public ResponseEntity<?> createReservation(ReservationRequestDTO reservationRequestDTO) throws ResourceNotFoundException {
         headers.set("APP-NAME", projectName + "-API " + projectTeam);
         try {
-            Reservation reservation = reservationRequestDTO.convertToEntity();
-            reservationRepository.findById(reservation.getReservationId()).orElseThrow(() -> new ResourceAlreadyExistException("User with ID " + reservation.getReservationId() + " is already exist!"));
-            Reservation newReservations = reservationRepository.save(reservation);
+            UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            User user = userRepository.findById(userDetails.getUserId()).orElseThrow(() -> new ResourceNotFoundException("User with ID " + reservationRequestDTO.getSeatDetailId() + " is not available!"));
+            SeatDetail seatDetail = seatDetailRepository.findById(reservationRequestDTO.getSeatDetailId()).orElseThrow(() -> new ResourceNotFoundException("Seat Detail with ID " + reservationRequestDTO.getSeatDetailId() + " is not available!"));
+            Reservation reservation = Reservation.builder().seatDetail(seatDetail).user(user).isActive(reservationRequestDTO.getIsActive()).build();
+            reservationRepository.save(reservation);
             logger.info("--------------------------");
             logger.info("Create Reservations " + reservation);
             logger.info("--------------------------");
-            return ResponseHandler.generateResponse("User with ID " + newReservations.getReservationId() + " successfully created!", HttpStatus.CREATED, headers, ZonedDateTime.now(), newReservations);
-        } catch (ResourceAlreadyExistException e) {
+            return ResponseHandler.generateResponse("User with ID " + reservationRequestDTO.getReservationId() + " successfully created!", HttpStatus.CREATED, headers, ZonedDateTime.now(), new MessageResponse("Succesfully created new reservation!"));
+        } catch (ResourceNotFoundException e) {
             return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.NOT_ACCEPTABLE, headers, ZonedDateTime.now(), null);
         }
     }
@@ -90,13 +104,16 @@ public class ReservationsServiceImpl implements ReservationsService {
     public ResponseEntity<?> updateReservation(ReservationRequestDTO reservationRequestDTO) throws ResourceNotFoundException {
         headers.set("APP-NAME", projectName + "-API " + projectTeam);
         try {
-            Reservation reservation = reservationRequestDTO.convertToEntity();
+            UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            User user = userRepository.findById(userDetails.getUserId()).orElseThrow(() -> new ResourceNotFoundException("User with ID " + reservationRequestDTO.getSeatDetailId() + " is not available!"));
+            SeatDetail seatDetail = seatDetailRepository.findById(reservationRequestDTO.getSeatDetailId()).orElseThrow(() -> new ResourceNotFoundException("Seat Detail with ID " + reservationRequestDTO.getSeatDetailId() + " is not available!"));
+            Reservation reservation = Reservation.builder().reservationId(reservationRequestDTO.getReservationId()).seatDetail(seatDetail).user(user).isActive(reservationRequestDTO.getIsActive()).build();
             reservationRepository.findById(reservation.getReservationId()).orElseThrow(() -> new ResourceNotFoundException("User with ID " + reservation.getReservationId() + " is not available!"));
-            Reservation updatedReservations = reservationRepository.save(reservation);
+            reservationRepository.save(reservation);
             logger.info("--------------------------");
             logger.info("Update Reservations " + reservation);
             logger.info("--------------------------");
-            return ResponseHandler.generateResponse("User with ID " + updatedReservations.getReservationId() + " successfully updated!", HttpStatus.OK, headers, ZonedDateTime.now(), updatedReservations);
+            return ResponseHandler.generateResponse("User with ID " + reservationRequestDTO.getReservationId() + " successfully updated!", HttpStatus.OK, headers, ZonedDateTime.now(), new MessageResponse("Succesfully updated new reservation!"));
         } catch (ResourceNotFoundException e) {
             return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.NOT_FOUND, headers, ZonedDateTime.now(), null);
         }

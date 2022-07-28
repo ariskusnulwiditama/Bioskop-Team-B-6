@@ -60,7 +60,7 @@ public class ReservationController {
      */
     @PostMapping("/reservation/create")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<?> create(ReservationRequestDTO reservationRequestDTO) throws ResourceAlreadyExistException {
+    public ResponseEntity<?> create(ReservationRequestDTO reservationRequestDTO) throws ResourceNotFoundException {
         return reservationService.createReservation(reservationRequestDTO);
     }
 

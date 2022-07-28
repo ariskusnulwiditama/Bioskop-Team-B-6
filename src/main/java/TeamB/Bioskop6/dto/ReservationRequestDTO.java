@@ -1,9 +1,6 @@
 package TeamB.Bioskop6.dto;
 
-import TeamB.Bioskop6.entity.Reservation;
 import lombok.*;
-
-import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -11,22 +8,11 @@ import java.time.LocalDateTime;
 @Setter
 @Builder
 public class ReservationRequestDTO {
-
     private Integer reservationId;
+
+    private Integer seatDetailId;
+
+    private Integer userId;
     
     private Boolean isActive;
-
-    private LocalDateTime createdAt;
-
-    private LocalDateTime updatedAt;
-
-    public Reservation convertToEntity(){
-        return Reservation.builder()
-                .reservationId(this.reservationId)
-//                .schedule(this.schedule)
-                .isActive(this.isActive)
-                .createdAt(this.createdAt)
-                .updatedAt(this.updatedAt)
-                .build();
-    }
 }
