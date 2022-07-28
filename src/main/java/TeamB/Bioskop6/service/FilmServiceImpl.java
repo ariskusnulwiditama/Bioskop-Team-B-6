@@ -5,6 +5,7 @@ import TeamB.Bioskop6.helper.ResourceAlreadyExistException;
 import TeamB.Bioskop6.helper.ResourceNotFoundException;
 import TeamB.Bioskop6.dto.FilmRequestDTO;
 import TeamB.Bioskop6.dto.FilmResponseDTO;
+import TeamB.Bioskop6.dto.MessageResponse;
 import TeamB.Bioskop6.entity.Film;
 import TeamB.Bioskop6.handler.ResponseHandler;
 import TeamB.Bioskop6.repository.FilmRepository;
@@ -82,7 +83,7 @@ public class FilmServiceImpl implements FilmService {
             logger.info("--------------------------");
             logger.info("Create Film " + film);
             logger.info("--------------------------");
-            return ResponseHandler.generateResponse("User with ID " + newFilm.getFilmCode() + " successfully created!", HttpStatus.CREATED, headers, ZonedDateTime.now(), newFilm);
+            return ResponseHandler.generateResponse("User with ID " + newFilm.getFilmCode() + " successfully created!", HttpStatus.CREATED, headers, ZonedDateTime.now(), new MessageResponse("Successfully create new film!"));
         } catch (ResourceAlreadyExistException e) {
             return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.NOT_ACCEPTABLE, headers, ZonedDateTime.now(), null);
         }
@@ -100,7 +101,7 @@ public class FilmServiceImpl implements FilmService {
             logger.info("--------------------------");
             logger.info("Update Film " + film);
             logger.info("--------------------------");
-            return ResponseHandler.generateResponse("User with ID " + updatedFilm.getFilmCode() + " successfully updated!", HttpStatus.OK, headers, ZonedDateTime.now(), updatedFilm);
+            return ResponseHandler.generateResponse("User with ID " + updatedFilm.getFilmCode() + " successfully updated!", HttpStatus.OK, headers, ZonedDateTime.now(), new MessageResponse("Successfully update film!"));
         } catch (Exception e) {
             return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.NOT_FOUND, headers, ZonedDateTime.now(), null);
         }
@@ -115,8 +116,8 @@ public class FilmServiceImpl implements FilmService {
             logger.info("--------------------------");
             logger.info("Delete Film " + film);
             logger.info("--------------------------");
-            return ResponseHandler.generateResponse("User with ID " + id + " successfully deleted!", HttpStatus.OK, headers, ZonedDateTime.now(), null);
-        } catch (Exception e) {
+            return ResponseHandler.generateResponse(null, HttpStatus.OK, headers, ZonedDateTime.now(), new MessageResponse("User with ID " + id + " successfully deleted!"));
+        } catch (ResourceNotFoundException e) {
             return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.NOT_FOUND, headers, ZonedDateTime.now(), null);
         }
     }
