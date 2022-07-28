@@ -69,7 +69,7 @@ public class SeatController {
      * @return
      * @throws ResourceNotFoundException
      */
-    @PostMapping("/seat/{id}")
+    @PutMapping("/seat/{id}")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<?> update(@PathVariable Integer id, @RequestBody SeatRequestDTO seatRequestDTO) throws ResourceNotFoundException {
         return seatService.updateSeat(seatRequestDTO);

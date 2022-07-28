@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 import javax.mail.MessagingException;
 
 import TeamB.Bioskop6.controller.AuthController;
-import TeamB.Bioskop6.controller.FilmController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -137,8 +136,8 @@ public class AuthServiceImpl implements AuthService {
                             Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN).orElseThrow(() -> new RuntimeException("Error: Role is not found!"));
                             roles.add(adminRole);
                         break;
-                        case "mod":
-                            Role modRole = roleRepository.findByName(ERole.ROLE_MODERATOR).orElseThrow(() -> new RuntimeException("Error: Role is not found!"));
+                        case "cust":
+                            Role modRole = roleRepository.findByName(ERole.ROLE_CUSTOMER).orElseThrow(() -> new RuntimeException("Error: Role is not found!"));
                             roles.add(modRole);
                         break;
                         default :

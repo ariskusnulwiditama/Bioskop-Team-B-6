@@ -67,7 +67,7 @@ public class ScheduleController {
      */
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @PostMapping("/schedule/create")
-    public ResponseEntity<?> create(ScheduleRequestDTO scheduleRequestDTO) throws ResourceAlreadyExistException {
+    public ResponseEntity<?> create(ScheduleRequestDTO scheduleRequestDTO) throws ResourceNotFoundException {
         return scheduleService.createSchedule(scheduleRequestDTO);
     }
 

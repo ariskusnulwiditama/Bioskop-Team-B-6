@@ -17,7 +17,7 @@ public class StudioResponseDTO {
 
     private EStudioType type;
 
-    private String capacity;
+    private String capasity;
 
     private LocalDateTime createdAt;
 
