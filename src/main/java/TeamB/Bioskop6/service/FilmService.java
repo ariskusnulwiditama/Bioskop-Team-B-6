@@ -16,4 +16,6 @@ public interface FilmService {
     ResponseEntity<?> updateFilm(FilmRequestDTO filmRequestDTO) throws ResourceNotFoundException;
 
     ResponseEntity<?> deleteFilm(Integer id) throws ResourceNotFoundException;
+
+    ResponseEntity<?> findPlayingFilm() throws ResourceNotFoundException;
 }

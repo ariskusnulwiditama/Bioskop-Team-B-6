@@ -1,6 +1,7 @@
 package TeamB.Bioskop6.controller;
 
 import TeamB.Bioskop6.dto.ScheduleRequestDTO;
+import TeamB.Bioskop6.dto.getScheduleByFIlmNameRequest;
 import TeamB.Bioskop6.service.ReportPDFImpl;
 import TeamB.Bioskop6.service.ScheduleServiceImpl;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -93,6 +95,18 @@ public class ScheduleController {
     @DeleteMapping("/schedule/delete/{id}")
     public ResponseEntity<?> delete(@PathVariable Integer id) throws ResourceNotFoundException {
         return scheduleService.deleteSchedule(id);
+    }
+
+    /***
+     * Delete existing data in schedule table by its ID
+     * @param id
+     * @return
+     * @throws ResourceNotFoundException
+     */
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PostMapping("/schedule/byfilmname")
+    public ResponseEntity<?> findByFilmName(@RequestBody getScheduleByFIlmNameRequest filmName) throws ResourceNotFoundException {
+        return scheduleService.findScheduleByFilmName(filmName);
     }
 
     /***
