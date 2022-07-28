@@ -35,3 +35,4 @@ log4j.properties
 
 ### Others ###
 /src/main/resources/application.properties
+spring-boot-logger.log
